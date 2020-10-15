@@ -1,6 +1,6 @@
 
-const OapiCore = require("@larksuite/oapi-core");
-const OapiCard = require("@larksuite/oapi-card")
+const OapiCore = require("@larksuiteoapi/core");
+const OapiCard = require("@larksuiteoapi/card")
 const express = require('express');
 const bodyParser = require('body-parser');
 import {GetConfig} from "../config/config";

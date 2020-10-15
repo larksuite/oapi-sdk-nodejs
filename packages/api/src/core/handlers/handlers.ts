@@ -22,7 +22,7 @@ import {
     DefaultContentType,
     getConfigByCtx, HTTPHeaderKeyRequestID, HTTPKeyStatusCode,
     SdkVersion
-} from "@larksuite/oapi-core";
+} from "@larksuiteoapi/core";
 import * as fs from "fs";
 import tempy from "tempy";
 import * as stream from "stream";

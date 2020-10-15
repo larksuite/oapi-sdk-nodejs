@@ -1,4 +1,4 @@
-import {Config, Context} from "@larksuite/oapi-core";
+import {Config, Context} from "@larksuiteoapi/core";
 import {UserIDType} from "../constants/constants";
 
 export class GetISVTenantAccessTokenReq {

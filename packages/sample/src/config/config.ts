@@ -1,4 +1,4 @@
-import * as OapiCore from "@larksuite/oapi-core";
+import * as OapiCore from "@larksuiteoapi/core";
 
 const asyncRedis = require("async-redis");
 

@@ -1,5 +1,5 @@
-const OapiCore = require("@larksuite/oapi-core");
-const OapiEvent = require("@larksuite/oapi-event")
+const OapiCore = require("@larksuiteoapi/core");
+const OapiEvent = require("@larksuiteoapi/event")
 const express = require('express');
 const bodyParser = require('body-parser');
 import {GetConfig} from "../config/config";

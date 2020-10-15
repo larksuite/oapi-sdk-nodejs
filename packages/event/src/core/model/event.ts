@@ -1,4 +1,4 @@
-import {Request, Response} from "@larksuite/oapi-core";
+import {Request, Response} from "@larksuiteoapi/core";
 
 export const Version1 = "v1"
 export const Version2 = "v2"

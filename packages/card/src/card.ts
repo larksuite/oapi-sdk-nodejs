@@ -1,4 +1,4 @@
-import {Config, Context} from "@larksuite/oapi-core";
+import {Config, Context} from "@larksuiteoapi/core";
 import {Card} from "./model/card";
 
 export type Handler = (ctx: Context, card: Card) => Promise<any> | any | undefined

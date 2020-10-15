@@ -4,7 +4,7 @@ import {
     getConfigByCtx,
     HTTPHeaderKeyRequestID,
     Response, throwTokenInvalidErr
-} from "@larksuite/oapi-core";
+} from "@larksuiteoapi/core";
 import {Header, HTTPCard, HeaderKey, Card} from "../model/card";
 import {NotHandlerErr, SignatureErr} from "./err";
 import * as util from 'util'

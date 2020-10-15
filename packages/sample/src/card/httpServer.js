@@ -1,5 +1,5 @@
-const OapiCore = require("@larksuite/oapi-core");
-const OapiCard = require("@larksuite/oapi-card")
+const OapiCore = require("@larksuiteoapi/core");
+const OapiCard = require("@larksuiteoapi/card")
 import {GetConfig} from "../config/config";
 
 const conf = GetConfig(...)

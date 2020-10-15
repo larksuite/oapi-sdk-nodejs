@@ -8,7 +8,7 @@ import {
     getConfigByCtx,
     HTTPHeaderKeyRequestID,
     Response, throwTokenInvalidErr
-} from "@larksuite/oapi-core";
+} from "@larksuiteoapi/core";
 import {HTTPEvent, V1, V2, Version1} from "../model/event"
 
 const responseFormat = `{"codemsg":"%s"}`

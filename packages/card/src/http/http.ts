@@ -1,4 +1,4 @@
-import {Config, Context, Request} from "@larksuite/oapi-core";
+import {Config, Context, Request} from "@larksuiteoapi/core";
 import {HTTPCard} from "../model/card";
 import {handle} from "../handlers/handlers";
 

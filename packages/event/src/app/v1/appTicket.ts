@@ -1,5 +1,5 @@
 import {setTypeHandler} from "../../event";
-import {AppType, Config, Context, getAppTicketKey, getConfigByCtx} from "@larksuite/oapi-core";
+import {AppType, Config, Context, getAppTicketKey, getConfigByCtx} from "@larksuiteoapi/core";
 import {BaseEvent, V1} from "../../core/model/event";
 
 const EventType = "app_ticket"

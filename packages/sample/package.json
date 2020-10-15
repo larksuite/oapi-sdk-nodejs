@@ -1,5 +1,5 @@
 {
-  "name": "@larksuite/oapi-simple",
+  "name": "@larksuiteoapi/simple",
   "version": "1.0.0",
   "description": "larksuite open api simple sdk",
   "keywords": [
@@ -30,14 +30,13 @@
   "scripts": {
     "prepare": "npm run build",
     "build": "npm run build:clean && tsc",
-    "build:clean": "rm -rf ./dist",
-    "test": "npm run build && nyc mocha --config .mocharc.json src/**/*.test.ts"
+    "build:clean": "rm -rf ./dist"
   },
   "dependencies": {
-    "@larksuite/oapi-api": "1.0.0",
-    "@larksuite/oapi-core": "1.0.0",
-    "@larksuite/oapi-event": "1.0.0",
-    "@larksuite/oapi-card": "1.0.0",
+    "@larksuiteoapi/api": "1.0.0",
+    "@larksuiteoapi/core": "1.0.0",
+    "@larksuiteoapi/event": "1.0.0",
+    "@larksuiteoapi/card": "1.0.0",
     "async-redis": "^1.1.7",
     "body-parser": "^1.19.0",
     "express": "^4.17.1"

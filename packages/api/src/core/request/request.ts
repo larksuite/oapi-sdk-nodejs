@@ -2,7 +2,7 @@ import * as querystring from "querystring"
 import * as util from "util"
 import * as fetch from 'node-fetch'
 import {OAPIRootPath, UserIDType} from "../constants/constants";
-import {Context, Domain} from "@larksuite/oapi-core";
+import {Context, Domain} from "@larksuiteoapi/core";
 import * as stream from "stream";
 
 const ctxKeyRequestInfo = "x-request-info"

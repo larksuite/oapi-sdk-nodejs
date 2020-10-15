@@ -1,4 +1,4 @@
-import {CallbackType, Request, Response} from "@larksuite/oapi-core";
+import {CallbackType, Request, Response} from "@larksuiteoapi/core";
 
 export enum HeaderKey {
     LarkRequestTimestamp = "X-Lark-Request-Timestamp",

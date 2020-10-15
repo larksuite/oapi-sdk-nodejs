@@ -1,4 +1,4 @@
-import {Config, Context} from "@larksuite/oapi-core";
+import {Config, Context} from "@larksuiteoapi/core";
 import {V1, V2} from "./core/model/event";
 
 export type Handler = (ctx: Context, event: V1<any> | V2<any>) => Promise<void> | void

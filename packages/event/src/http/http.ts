@@ -1,7 +1,7 @@
 import {HTTPEvent} from "../core/model/event";
 import {handle} from "../core/handlers/handlers";
 import * as AppTicketEvent from "../app/v1/appTicket";
-import {Config, Context, Request} from "@larksuite/oapi-core";
+import {Config, Context, Request} from "@larksuiteoapi/core";
 
 
 export const httpHandle = async (conf: Config, request: Request, err: any) => {

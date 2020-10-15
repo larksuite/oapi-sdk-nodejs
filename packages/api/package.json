@@ -1,5 +1,5 @@
 {
-  "name": "@larksuite/oapi-api",
+  "name": "@larksuiteoapi/api",
   "version": "1.0.0",
   "description": "larksuite open api sdk",
   "keywords": [
@@ -29,11 +29,10 @@
   "scripts": {
     "prepare": "npm run build",
     "build": "npm run build:clean && tsc",
-    "build:clean": "rm -rf ./dist",
-    "test": "npm run build && nyc mocha --config .mocharc.json src/**/*.test.ts"
+    "build:clean": "rm -rf ./dist"
   },
   "dependencies": {
-    "@larksuite/oapi-core": "1.0.0",
+    "@larksuiteoapi/core": "1.0.0",
     "form-data": "^3.0.0",
     "node-fetch": "^2.6.0",
     "tempy": "^0.7.1"

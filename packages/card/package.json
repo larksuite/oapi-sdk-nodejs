@@ -1,5 +1,5 @@
 {
-  "name": "@larksuite/oapi-card",
+  "name": "@larksuite/card",
   "version": "1.0.0",
   "description": "larksuite open api card sdk",
   "keywords": [
@@ -30,11 +30,10 @@
   "scripts": {
     "prepare": "npm run build",
     "build": "npm run build:clean && tsc",
-    "build:clean": "rm -rf ./dist",
-    "test": "npm run build && nyc mocha --config .mocharc.json src/**/*.test.ts"
+    "build:clean": "rm -rf ./dist"
   },
   "dependencies": {
-    "@larksuite/oapi-core": "1.0.0"
+    "@larksuiteoapi/core": "1.0.0"
   },
   "devDependencies": {
     "@types/node": "^14.6.4",

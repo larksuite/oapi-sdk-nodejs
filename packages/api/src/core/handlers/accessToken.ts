@@ -1,4 +1,4 @@
-import * as common from "@larksuite/oapi-core";
+import * as common from "@larksuiteoapi/core";
 import {
     AppAccessToken,
     GetInternalAccessTokenReq,
@@ -17,7 +17,7 @@ import {
     AppType,
     getConfigByCtx,
     getTenantAccessTokenKey
-} from "@larksuite/oapi-core";
+} from "@larksuiteoapi/core";
 import {throwAppTicketIsEmptyErr} from "../errors/errors";
 
 const expiryDelta = 3 * 60

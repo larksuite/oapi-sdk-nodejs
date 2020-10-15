@@ -1,7 +1,7 @@
 import {Request} from "./core/request/request";
 import {handle} from "./core/handlers/handlers";
 import {newError, instanceOfError} from "./core/response/error";
-import {Config, Context} from "@larksuite/oapi-core";
+import {Config, Context} from "@larksuiteoapi/core";
 
 export const send = async <T>(ctx: Context, conf: Config, req: Request<T>) => {
     conf.withContext(ctx)
