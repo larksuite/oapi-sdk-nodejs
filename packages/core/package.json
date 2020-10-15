@@ -1,0 +1,41 @@
+{
+  "name": "@larksuite/oapi-core",
+  "version": "1.0.0",
+  "description": "larksuite open api core sdk",
+  "keywords": [
+    "feishu",
+    "larksuite"
+  ],
+  "author": {
+    "name": "Lark Technologies Pte. Ltd"
+  },
+  "main": "dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
+  "engines": {
+    "node": ">= 8.9.0",
+    "npm": ">= 5.5.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/larksuite/oapi-sdk-nodejs",
+  "bugs": {
+    "url": "https://github.com/larksuite/oapi-sdk-nodejs/issues"
+  },
+  "scripts": {
+    "prepare": "npm run build",
+    "build": "npm run build:clean && tsc",
+    "build:clean": "rm -rf ./dist",
+    "test": "npm run build && nyc mocha --config .mocharc.json src/**/*.test.ts"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^14.11.8",
+    "ts-node": "^9.0.0",
+    "typescript": "^3.9.7"
+  }
+}
