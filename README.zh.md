@@ -99,7 +99,6 @@
         
         // 发送消息
         let ctx = new OapiCore.Context()
-        
         let req = OapiApi.newRequest("message/v4/send", "POST", OapiApi.AccessTokenType.Tenant, {
               open_id: "open_id",
               msg_type: "text",
@@ -109,7 +108,6 @@
           }, 
         // 商店应用，OapiApi.setTenantKey("TenantKey"),
         )
-        
         OapiApi.send(ctx, conf, req).then(result => {
             console.log(result)
             console.log(ctx.getRequestID())
@@ -121,6 +119,7 @@
             console.error(e.msg)
             console.error(e)
         })
+    
     
         const fs = require("fs")
         // 上传图片
@@ -209,15 +208,15 @@
     const OapiCard = require("@larksuiteoapi/card")
     const conf = xxx //OapiCore.Config
     
-   // 处理消息卡片回调，card里有哪些字段，请参考开放平台文档
-   OapiCard.setHandler(conf, (ctx, card) => {
+    // 处理消息卡片回调，card里有哪些字段，请参考开放平台文档
+    OapiCard.setHandler(conf, (ctx, card) => {
        let conf = OapiCore.getConfigByCtx(ctx);
        console.log(conf);
        console.log("----------------");
        console.log(ctx.getRequestID());
        console.log(card);
-   })
-    
+    })
+        
     ```
     
     
