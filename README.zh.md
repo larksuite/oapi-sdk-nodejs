@@ -72,12 +72,12 @@
         const OapiApi = require("@larksuiteoapi/api")
         
         // 创建请求
-        // httpPath：API路径（`open-apis/`之后的路径），例如：https://domain/open-apis/authen/v1/user_info，则 httpPath："authen/v1/user_info"
+        // httpPath：API路径（`open-apis/`之后的路径），例如：https://{domain}/open-apis/authen/v1/user_info，则 httpPath："authen/v1/user_info"
         // httpMethod: GET/POST/PUT/BATCH/DELETE
         // accessTokenType：API使用哪种token访问，取值范围：OapiApi.AccessTokenType.App/Tenant/User，例如：OapiApi.AccessTokenType.Tenant
         // input：请求体（可能是formdata（例如：文件上传））,如果不需要请求体（例如一些GET请求），则传：undefined
         // optFns：扩展函数，一些不常用的参数封装，如下：
-          // OapiApi.setPathParams({"user_id":4})：设置 URL Path 参数（有:前缀）值，当 httpPath="user/:user_id" 时
+          // OapiApi.setPathParams({"user_id":4})：设置URL Path参数（有:前缀）值，当httpPath="users/:user_id"时，请求的URL="https://{domain}/open-apis/users/4"
           // OapiApi.setQueryParams({"age":4,"types":[1,2]})：设置 URL qeury，会在url追加?age=4&types=1&types=2
           // OapiApi.setTimeoutOfMs(1000)，设置http请求，超时时间毫秒值
           // OapiApi.setIsResponseStream()，设置响应的是否是流，例如下载文件，这时：output值是Buffer类型
