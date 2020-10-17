@@ -10,12 +10,12 @@
 
 ## @larksuiteoapi/core
 
-- 不需要npm安装，@larksuiteoapi/api、@larksuiteoapi/event、@larksuiteoapi/card都依赖了该包
+- 不需要npm安装，`@larksuiteoapi/api`、`@larksuiteoapi/event`、`@larksuiteoapi/card` 都依赖了该包
 
 - 使用说明
     - 获取应用的配置
         - 方便开发提供了[代码样例](packages/sample/src/config/config.ts)
-            - 使用 redis 实现 Store接口，用于维护 app_access_token`、`tenant_access_token` 的生命周期
+            - 使用 redis 实现 Store接口，用于维护 `app_access_token`、`tenant_access_token` 的生命周期
         - 方法使用说明，如下：
     ```javascript
       
@@ -25,14 +25,14 @@
       // appSecret：应用凭证中的App Secret
       // verificationToken：事件订阅中的Verification Token
       // encryptKey：事件订阅中的Encrypt Key，可以为""，表示事件内容不加密
-      // 自建应用的配置
+      // 企业自建应用的配置
       let appSettings = OapiCore.newInternalAppSettings("[appID]", "[appSecret]", "[verificationToken]", "[encryptKey]")
-      // 商店应用的配置
+      // 应用商店应用的配置
       let appSettings = OapiCore.newISVAppSettings("[appID]", "[appSecret]", "[verificationToken]", "[encryptKey]")
       
       
       // 创建Config
-      // domain：域名http地址：OapiCore.Domain.FeiShu / OapiCore.Domain.Lark
+      // domain：域名http地址：OapiCore.Domain.FeiShu / OapiCore.Domain.LarkSuite
       // appSettings：应用配置
       // logger：[日志接口](packages/core/src/log/log.ts)
       // loggerLevel：输出的日志级别 OapiCore.LoggerLevel.DEBUG/INFO/WARN/ERROR (packages/core/src/log/log.ts)
@@ -65,7 +65,7 @@
     npm install @larksuiteoapi/api
   ``` 
   - 使用说明
-    - 对于`商店应用`，在获取`app_access_token`时，需要 `app_ticket`，需要启动事件订阅服务（`@larksuiteoapi/event`）
+    - 对于`应用商店应用`，在获取`app_access_token`时，需要 `app_ticket`，需要启动事件订阅服务（`@larksuiteoapi/event`）
     - 封装请求，如下：
       ```javascript
       
@@ -88,8 +88,8 @@
       
       ```
     - 发送请求，如下：
-        - 可以参考开发者文档，知道 result（= response.Body["data"]，非下载文件接口）有哪些字段
-        - OapiApi.send，可能会 throw error，error = response.Body[code，msg…]
+        - 可以参考开发者文档，知道 result（ = response.Body["data"]，非下载文件接口）有哪些字段
+        - OapiApi.send，可能会 throw error（ = response.Body[code，msg…]）
     ```javascript
         
         const OapiApi = require("@larksuiteoapi/api")
@@ -106,7 +106,7 @@
                 text: "test"
               }
           }, 
-        // 商店应用，OapiApi.setTenantKey("TenantKey"),
+        // 应用商店应用，OapiApi.setTenantKey("TenantKey"),
         )
         OapiApi.send(ctx, conf, req).then(result => {
             console.log(result)
@@ -165,7 +165,7 @@
 ## @larksuiteoapi/event
 
 - 处理流程
-    - 封装了`商店应用`的`app_ticket`事件（需要再次设置该事件的处理者），将其存入Store，供`@larksuiteoapi/api`使用
+    - 封装了`应用商店应用`的`app_ticket`事件（需要再次设置该事件的处理者），将其存入Store，供`@larksuiteoapi/api`使用
   - 安装
   ```shell script
     npm install @larksuiteoapi/event
