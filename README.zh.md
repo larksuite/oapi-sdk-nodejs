@@ -162,6 +162,18 @@
         })
         
     ```
+  - 工具包
+    - 下载文件（例如：图片）
+    ```javascript
+        const fs = require("fs")
+        const OapiApi = require("@larksuiteoapi/api")
+        // 参数一：文件的URL
+        // 参数二：请求超时时间（单位：毫秒）
+        OapiApi.downloadFile("https://s0.pstatp.com/ee/lark-open/web/static/apply.226f11cb.png", 3000).then(buf => {
+            fs.writeFileSync("./test.png", buf)
+        })
+    ```   
+    
 ## @larksuiteoapi/event
 
 - 处理流程
