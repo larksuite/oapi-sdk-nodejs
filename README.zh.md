@@ -1,12 +1,13 @@
 # larksuit open api sdk
 [English](README.md)
 
-| 开放接口    | 描述 | NPM 包名      |
+| 模块    | 描述 | NPM 包名      |
 |--------------|--------------|-------------------|
 |  core    | 应用信息配置及一些通用的方法  |  `@larksuiteoapi/core`     |
 |  api     | 发送请求获取larksuite/feishu的业务开放能力  |  `@larksuiteoapi/api`      |
 |  event   | 监听larksuite/feishu的业务数据发生变化，产生的事件  |  `@larksuiteoapi/event`      |
 |  card    | 监听消息卡片交互时的动作  |  `@larksuiteoapi/card`   |
+|  sample  | 示例代码 |     |
 
 ## @larksuiteoapi/core
 
