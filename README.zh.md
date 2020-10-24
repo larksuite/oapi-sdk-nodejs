@@ -63,7 +63,7 @@
     ![处理流程图](api_process.png)
   - 安装
   ```shell script
-    npm install @larksuiteoapi/api
+  $  npm install @larksuiteoapi/api
   ``` 
   - 使用说明
     - 对于`应用商店应用`，在获取`app_access_token`时，需要 `app_ticket`，需要启动事件订阅服务（`@larksuiteoapi/event`）
@@ -163,7 +163,7 @@
         })
         
     ```
-  - 工具包
+  - 工具
     - 下载文件（例如：图片）
     ```javascript
         const fs = require("fs")
@@ -179,9 +179,10 @@
 
 - 处理流程
     - 封装了`应用商店应用`的`app_ticket`事件（需要再次设置该事件的处理者），将其存入Store，供`@larksuiteoapi/api`使用
+    - 事件数据的解密与来源可靠性的验证
   - 安装
   ```shell script
-    npm install @larksuiteoapi/event
+  $  npm install @larksuiteoapi/event
   ```
   - 使用说明
     - 事件监听服务启动
@@ -209,8 +210,11 @@
 
   - 安装
   ```shell script
-    npm install @larksuiteoapi/card
+  $  npm install @larksuiteoapi/card
   ```
+  - 封装了
+    - 卡片数据的有效性、来源可靠性的验证
+    
   - 使用说明
     - 消息卡片回调服务启动
         - [使用原生的http server启动](packages/sample/src/card/httpServer.js)  
