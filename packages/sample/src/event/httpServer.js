@@ -15,5 +15,5 @@ OapiEvent.setTypeHandler(conf, "app_status_change", (ctx, event) => {
     console.log(event);
 })
 
-// startup event http server, port: 8080
+// startup event http server, port: 8089
 OapiEvent.startServer(conf, 8089)

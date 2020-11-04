@@ -32,18 +32,18 @@ const unmarshalFunc = async (ctx: Context, httpEvent: HTTPEvent) => {
     } else {
         json = body
     }
-    let content = json["encrypt"].toString()
     if (conf.getAppSettings().encryptKey) {
+        let content = json["encrypt"]
         let cipher = new AESCipher(conf.getAppSettings().encryptKey)
         content = cipher.decrypt(content)
+        json = JSON.parse(content)
     }
-    conf.getLogger().debug(util.format("[unmarshal] event: %s", content))
-    json = JSON.parse(content)
+    conf.getLogger().debug(util.format("[unmarshal] event: %s", JSON.stringify(json)))
     httpEvent.input = json
-    let version = Version1
+    let schema = Version1
     let token = json["token"]
-    if (json["version"]) {
-        version = json["version"]
+    if (json["schema"]) {
+        schema = json["schema"]
     }
     let eventType: string
     if (json["event"]) {
@@ -53,7 +53,7 @@ const unmarshalFunc = async (ctx: Context, httpEvent: HTTPEvent) => {
         token = json["header"]["token"]
         eventType = json["header"]["event_type"]
     }
-    httpEvent.version = version
+    httpEvent.schema = schema
     httpEvent.eventType = eventType
     httpEvent.type = json["type"]
     httpEvent.challenge = json["challenge"]
@@ -76,7 +76,7 @@ const handlerFunc = async (ctx: Context, httpEvent: HTTPEvent) => {
         throw new NotHandlerErr(httpEvent.eventType)
     }
     let input: V1<any> | V2<any>
-    if (httpEvent.version == Version1) {
+    if (httpEvent.schema == Version1) {
         input = httpEvent.input as V1<any>
     } else {
         input = httpEvent.input as V2<any>

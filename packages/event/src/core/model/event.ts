@@ -1,14 +1,14 @@
 import {Request, Response} from "@larksuiteoapi/core";
 
-export const Version1 = "v1"
-export const Version2 = "v2"
+export const Version1 = "1.0"
+export const Version2 = "2.0"
 
 
 export class HTTPEvent {
     request: Request
     response: Response
     input: object
-    version: string
+    schema: string
     type: string
     eventType: string
     challenge: string

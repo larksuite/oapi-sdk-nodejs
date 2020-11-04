@@ -7,7 +7,9 @@ const bodyParser = require('body-parser');
 // const conf = GetConfig(...)
 
 // for test
-const conf = OapiCore.getTestInternalConf("online")
+const conf = OapiCore.getTestISVConf("staging")
+
+console.log(conf)
 
 OapiEvent.setTypeHandler(conf, "app_status_change", (ctx, event) => {
     let conf = OapiCore.getConfigByCtx(ctx);
@@ -17,7 +19,14 @@ OapiEvent.setTypeHandler(conf, "app_status_change", (ctx, event) => {
     console.log(event);
 })
 
-// startup event http server by express, port: 8080
+OapiEvent.setTypeHandler(conf, "user.created_v2", (ctx, event) => {
+    let conf = OapiCore.getConfigByCtx(ctx);
+    console.log(conf);
+    console.log("----------------");
+    console.log(ctx.getRequestID());
+    console.log(event);
+})
+
 const app = express();
 
 app.use(bodyParser());
@@ -33,6 +42,7 @@ app.post('/webhook/event', (req, res) => {
     })
 });
 
+// startup event http server by express, port: 8089
 app.listen(8089, () => {
     console.log(`listening at :8089`)
 })

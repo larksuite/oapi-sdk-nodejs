@@ -28,7 +28,7 @@ const getDomain = (env: string): Domain => {
 
 export const getTestISVConf = (env: string): Config => {
     env = env.toUpperCase();
-    return newTestConfig(getDomain(env), getInternalAppSettings(env))
+    return newTestConfig(getDomain(env), getISVAppSettings(env))
 }
 
 export const getTestInternalConf = (env: string): Config => {
