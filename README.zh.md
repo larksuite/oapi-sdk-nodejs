@@ -1,5 +1,4 @@
 # larksuit open api sdk
-[English](README.md)
 
 | 模块    | 描述 | NPM 包名      |
 |--------------|--------------|-------------------|
@@ -15,7 +14,7 @@
 
 - 使用说明
     - 获取应用的配置
-        - 方便开发提供了[代码样例](packages/sample/src/config/config.ts)
+        - 方便开发提供了[代码样例](https://github.com/larksuite/oapi-sdk-nodejs/blob/main/packages/sample/src/config/config.ts)
             - 使用 redis 实现 Store接口，用于维护 `app_access_token`、`tenant_access_token` 的生命周期
         - 方法使用说明，如下：
     ```javascript
@@ -35,9 +34,9 @@
       // 创建Config
       // domain：域名http地址：OapiCore.Domain.FeiShu / OapiCore.Domain.LarkSuite
       // appSettings：应用配置
-      // logger：[日志接口](packages/core/src/log/log.ts)
+      // logger：[日志接口](https://github.com/larksuite/oapi-sdk-nodejs/blob/main/packages/core/src/log/log.ts)
       // loggerLevel：输出的日志级别 OapiCore.LoggerLevel.DEBUG/INFO/WARN/ERROR (packages/core/src/log/log.ts)
-      // store: [存储接口](packages/core/src/store/store.ts)，用来存储app_ticket/app_access_token/tenant_access_token
+      // store: [存储接口](https://github.com/larksuite/oapi-sdk-nodejs/blob/main/packages/core/src/store/store.ts)，用来存储app_ticket/app_access_token/tenant_access_token
       // 用于线上的config
       let conf = OapiCore.newConfig(domain, appSettings, logger, loggerLevel, store)    
       
@@ -59,8 +58,10 @@
   ## @larksuiteoapi/api
   
   - 处理流程
-    - 对`app_access_token`、`tenant_access_token`的获取及生命周期的维护做了封装，开发者可直接访问业务接口
-    ![处理流程图](api_process.png)
+    - 对`app_access_token`、`tenant_access_token`的获取及生命周期的维护做了封装，**开发者可直接访问业务接口**
+	
+![图片名称](//sf1-ttcdn-tos.pstatp.com/obj/website-img/588c0b73ff89ed27fab8c9655c43d2fe_XJnx5vPsEo.png)
+
   - 安装
   ```shell script
   $  npm install @larksuiteoapi/api
@@ -163,6 +164,8 @@
         })
         
     ```
+    - 批量发送请求
+        - [示例代码](https://github.com/larksuite/oapi-sdk-nodejs/blob/main/packages/sample/src/api/batchReqCall.js) 
   - 工具
     - 下载文件（例如：图片）
     ```javascript
@@ -186,8 +189,8 @@
   ```
   - 使用说明
     - 事件监听服务启动
-        - [使用原生的http server启动](packages/sample/src/event/httpServer.js)  
-        - [使用Express启动](packages/sample/src/event/express.js)
+        - [使用原生的http server启动](https://github.com/larksuite/oapi-sdk-nodejs/blob/main/packages/sample/src/event/httpServer.js)  
+        - [使用Express启动](https://github.com/larksuite/oapi-sdk-nodejs/blob/main/packages/sample/src/event/express.js)
     - 设置事件的处理者，样例如下：
     ```javascript
     
@@ -217,8 +220,8 @@
     
   - 使用说明
     - 消息卡片回调服务启动
-        - [使用原生的http server启动](packages/sample/src/card/httpServer.js)  
-        - [使用Express启动](packages/sample/src/card/express.js)
+        - [使用原生的http server启动](https://github.com/larksuite/oapi-sdk-nodejs/blob/main/packages/sample/src/card/httpServer.js)  
+        - [使用Express启动](https://github.com/larksuite/oapi-sdk-nodejs/blob/main/packages/sample/src/card/express.js)
     - 设置卡片的处理者，样例如下：
     ```javascript
     

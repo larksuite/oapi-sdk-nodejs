@@ -1,11 +1,13 @@
-
 const OapiCore = require("@larksuiteoapi/core");
 const OapiCard = require("@larksuiteoapi/card")
 const express = require('express');
 const bodyParser = require('body-parser');
-import {GetConfig} from "../config/config";
+// for online
+// import {GetConfig} from "../config/config";
+// const conf = GetConfig(...)
 
-const conf = GetConfig(...)
+// for test
+const conf = OapiCore.getTestInternalConf("online")
 
 // set handler
 OapiCard.setHandler(conf, (ctx, card) => {

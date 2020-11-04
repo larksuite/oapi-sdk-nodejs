@@ -1,6 +1,6 @@
 {
   "name": "@larksuiteoapi/event",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "larksuite open api event sdk",
   "keywords": [
     "feishu",
@@ -33,7 +33,7 @@
     "build:clean": "rm -rf ./dist"
   },
   "dependencies": {
-    "@larksuiteoapi/core": "1.0.0"
+    "@larksuiteoapi/core": "1.0.1"
   },
   "devDependencies": {
     "@types/node": "^14.6.4",

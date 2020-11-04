@@ -18,38 +18,57 @@ export const send = async <T>(ctx: Context, conf: Config, req: Request<T>) => {
 
 export class ReqCallDone<T> {
     ctx: Context
+    reqCall: ReqCaller<T>
     result: T
     err: any
 
-    constructor(ctx: Context) {
-        this.ctx = ctx
+    constructor(reqCall: ReqCaller<T>) {
+        this.reqCall = reqCall
+        this.ctx = reqCall.ctx
     }
 }
 
-export interface ReqCall<T> {
+export interface ReqCaller<T> {
     ctx: Context
 
     do(): Promise<T> | T
 }
 
-export type ErrorCallback = (reqCall: ReqCall<any>, err: any) => Promise<void> | void
+export class ReqCall<T> implements ReqCaller<T> {
+    ctx: Context
+    conf: Config
+    req: Request<T>
+
+    constructor(ctx: Context, conf: Config, req: Request<T>) {
+        this.ctx = ctx;
+        this.conf = conf;
+        this.req = req;
+    }
+
+    do() {
+        return send(this.ctx, this.conf, this.req);
+    }
+
+}
+
+export type ErrorCallback = (reqCall: ReqCaller<any>, err: any) => Promise<void> | void
 
 export class BatchReqCall {
-    readonly reqCalls: ReqCall<any>[]
+    private readonly reqCalls: ReqCaller<any>[]
+    private readonly errorCallback: ErrorCallback
     readonly reqCallDos: ReqCallDone<any>[]
-    readonly errorCallback: ErrorCallback
 
-    constructor(errorCallback: ErrorCallback, ...reqCalls: ReqCall<any>[]) {
+    constructor(errorCallback: ErrorCallback, ...reqCalls: ReqCaller<any>[]) {
         this.reqCalls = reqCalls
         this.reqCallDos = []
         for (let v of this.reqCalls) {
-            this.reqCallDos.push(new ReqCallDone(v.ctx))
+            this.reqCallDos.push(new ReqCallDone(v))
         }
         this.errorCallback = errorCallback
     }
 
     do = async () => {
-        await Promise.all(this.reqCalls.map((reqCall: ReqCall<any>, index: number) => {
+        await Promise.all(this.reqCalls.map((reqCall: ReqCaller<any>, index: number) => {
             return reqCall.do().then(result => {
                 this.reqCallDos[index].result = result
             }).catch(e => {

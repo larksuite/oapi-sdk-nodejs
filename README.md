@@ -163,6 +163,8 @@
         })
         
     ```
+    - batch request call
+        - [code sample](https://github.com/larksuite/oapi-sdk-nodejs/blob/main/packages/sample/src/api/batchReqCall.js) 
   - Tool
     - Download file (for example: picture)
     ```javascript

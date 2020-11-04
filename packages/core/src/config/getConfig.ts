@@ -2,36 +2,44 @@ import {AppSettings, newInternalAppSettings, newISVAppSettings} from "./settings
 import {Config, newTestConfig} from "./config";
 import {Domain} from "../constants/constants";
 
-const domainFeiShuStaging = (): string => {
-    return process.env.DomainFeiShuStaging as string
+const domainFeiShu = (env: string): string => {
+    return process.env[env + "_FEISHU_DOMAIN"] as string
 }
 
-const getStagingISVAppSettings = (): AppSettings => {
-    return newISVAppSettings(process.env.ISVAppID as string, process.env.ISVAppSecret as string,
-        process.env.ISVVerificationToken as string, process.env.ISVEventEncryptKey as string)
+const getISVAppSettings = (env: string): AppSettings => {
+    return newISVAppSettings(process.env[env + "_ISV_APP_ID"] as string, process.env[env + "_ISV_APP_SECRET"] as string,
+        process.env[env + "_ISV_VERIFICATION_TOKEN"] as string, process.env[env + "_ISV_ENCRYPT_KEY"] as string)
 }
 
-export const getStagingTestISVConf = (): Config => {
-    return newTestConfig(domainFeiShuStaging() as Domain, getStagingISVAppSettings())
+const getInternalAppSettings = (env: string): AppSettings => {
+    return newInternalAppSettings(process.env[env + "_INTERNAL_APP_ID"] as string, process.env[env + "_INTERNAL_APP_SECRET"] as string,
+        process.env[env + "_INTERNAL_VERIFICATION_TOKEN"] as string, process.env[env + "_INTERNAL_ENCRYPT_KEY"] as string)
 }
 
-export const getInternalAppSettings = (): AppSettings => {
-    return newInternalAppSettings(process.env.InternalAppID as string, process.env.InternalAppSecret as string,
-        process.env.InternalVerificationToken as string, process.env.InternalEventEncryptKey as string)
+const getDomain = (env: string): Domain => {
+    if (env != "STAGING" && env != "PRE" && env != "ONLINE") {
+        throw new Error("env must in [staging, pre, online]")
+    }
+    if (env == "ONLINE") {
+        return Domain.FeiShu
+    }
+    return domainFeiShu(env) as Domain
 }
 
-export const getTestInternalConf = (): Config => {
-    return newTestConfig(Domain.FeiShu, getInternalAppSettings())
+export const getTestISVConf = (env: string): Config => {
+    env = env.toUpperCase();
+    return newTestConfig(getDomain(env), getInternalAppSettings(env))
 }
 
-export const getISVAppSettings = (): AppSettings => {
-    return newISVAppSettings(process.env.ISVAppID as string, process.env.ISVAppSecret as string,
-        process.env.ISVVerificationToken as string, process.env.ISVEventEncryptKey as string)
+export const getTestInternalConf = (env: string): Config => {
+    env = env.toUpperCase();
+    return newTestConfig(getDomain(env), getInternalAppSettings(env))
 }
 
-export const getTestISVConf = (): Config => {
-    return newTestConfig(Domain.FeiShu, getInternalAppSettings())
-}
+
+
+
+
 
 
 

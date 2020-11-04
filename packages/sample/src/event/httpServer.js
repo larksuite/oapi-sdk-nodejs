@@ -1,8 +1,11 @@
 const OapiCore = require("@larksuiteoapi/core");
 const OapiEvent = require("@larksuiteoapi/event")
-import {GetConfig} from "../config/config";
+// for online
+// import {GetConfig} from "../config/config";
+// const conf = GetConfig(...)
 
-const conf = GetConfig(...)
+// for test
+const conf = OapiCore.getTestInternalConf("online")
 
 OapiEvent.setTypeHandler(conf, "app_status_change", (ctx, event) => {
     let conf = OapiCore.getConfigByCtx(ctx);

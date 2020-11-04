@@ -1,5 +1,5 @@
 export const throwAccessTokenTypeIsInValidErr = () => {
-    throw new Error("access token type is invalid")
+    throw new Error("access token type invalid")
 }
 export const throwTenantKeyIsEmptyErr = () => {
     throw new Error("tenant key is empty")

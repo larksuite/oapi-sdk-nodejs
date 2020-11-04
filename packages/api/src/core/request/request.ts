@@ -243,8 +243,12 @@ const resolvePath = (path: string, pathVar: { [key: string]: any }): string => {
 export const newRequestOfTs = <T>(httpPath: string, httpMethod: string, accessTokenTypes: AccessTokenType[],
                                   input: any, output: T, ...optFns: OptFn[]): Request<T> => {
     let accessibleTokenTypeSet = new Set<AccessTokenType>()
+    let accessTokenType = accessTokenTypes[0]
     for (let v of accessTokenTypes) {
         accessibleTokenTypeSet.add(v)
+        if (v == AccessTokenType.Tenant) {
+            accessTokenType = v
+        }
     }
     let r = new Request<T>()
     r.httpPath = httpPath
@@ -252,7 +256,7 @@ export const newRequestOfTs = <T>(httpPath: string, httpMethod: string, accessTo
     r.accessibleTokenTypeSet = accessibleTokenTypeSet
     r.input = input
     r.output = output
-    r.accessTokenType = accessTokenTypes[0]
+    r.accessTokenType = accessTokenType
     r.optFns = optFns
     return r
 }

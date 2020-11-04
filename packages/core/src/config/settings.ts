@@ -31,3 +31,13 @@ export function newInternalAppSettings(appID: string, appSecret: string, verific
     return new AppSettings(AppType.Internal, appID, appSecret, encryptKey, verificationToken)
 }
 
+export function getISVAppSettingsByEnv(): AppSettings {
+    return new AppSettings(AppType.ISV, process.env["APP_ID"] as string, process.env["APP_SECRET"] as string,
+        process.env["VERIFICATION_TOKEN"] as string, process.env["ENCRYPT_KEY"] as string)
+}
+
+export function getInternalAppSettingsByEnv(): AppSettings {
+    return new AppSettings(AppType.Internal, process.env["APP_ID"] as string, process.env["APP_SECRET"] as string,
+        process.env["VERIFICATION_TOKEN"] as string, process.env["ENCRYPT_KEY"] as string)
+}
+
