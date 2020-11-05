@@ -17,7 +17,7 @@ export const setHandler = (conf: Config) => {
         if (conf.getAppSettings().appType == AppType.Internal) {
             return
         }
-        return conf.getStore().put(getAppTicketKey(event.event.app_id), event.event.app_ticket, 24 * 3600)
+        return conf.getStore().put(getAppTicketKey(event.event.app_id), event.event.app_ticket, 12 * 3600)
     })
 }
 

@@ -50,6 +50,7 @@ export class Info<T> {
     userID: UserID
     isNotDataField: boolean = false         // response body is not data field
     isResponseStream: boolean = false
+    isResponseStreamReal: boolean = false
     output: T                               // response body data
     retryable: boolean = false
     timeout: number                         // http request time out
@@ -161,7 +162,7 @@ export class Request<T> extends Info<T> {
     }
 
     toString(): string {
-        return util.format("%s %s\n%s", this.httpMethod, this.url(), this.accessTokenType)
+        return util.format("%s %s %s", this.httpMethod, this.url(), this.accessTokenType)
     }
 
     init() {

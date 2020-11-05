@@ -124,6 +124,9 @@
     
         const fs = require("fs")
         // Upload an image
+        // use stream
+        // let data = fs.createReadStream('./test.png');
+        // use byte[]
         let data = fs.readFileSync('./test.png');
         let formData = new OapiApi.FormData()
         formData.setField("image_type", "message")

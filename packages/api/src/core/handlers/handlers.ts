@@ -57,7 +57,7 @@ const validateFunc = async <T>(ctx: Context, req: request.Request<T>) => {
     }
 }
 
-const reqBodyFromFormData = <T>(_: Context, req: request.Request<T>): void => {
+const reqBodyFromFormData = <T>(ctx: Context, req: request.Request<T>): void => {
     const form = new FormData();
     let fd = req.input as formdata.FormData
     Array.from(fd.getParams().entries()).forEach(([key, value]) => {
@@ -89,12 +89,14 @@ const reqBodyFromFormData = <T>(_: Context, req: request.Request<T>): void => {
             isStream: true,
             filePath: filePath,
         }
+        getConfigByCtx(ctx).getLogger().debug(util.format("[build]request:%s, formdata:%s", req, filePath))
     } else {
         req.httpRequestOpts.body = form.getBuffer()
+        getConfigByCtx(ctx).getLogger().debug(util.format("[build]request:%s, formdata:", req), req.httpRequestOpts.body)
     }
 }
 
-const reqBodyFromInput = <T>(_: Context, req: request.Request<T>): void => {
+const reqBodyFromInput = <T>(ctx: Context, req: request.Request<T>): void => {
     req.httpRequestOpts.headers[ContentType] = DefaultContentType
     let input: string
     if (typeof req.input == "string") {
@@ -103,6 +105,7 @@ const reqBodyFromInput = <T>(_: Context, req: request.Request<T>): void => {
         input = JSON.stringify(req.input)
     }
     req.httpRequestOpts.body = input
+    getConfigByCtx(ctx).getLogger().debug(util.format("[build]request:%s, body:", req), req.httpRequestOpts.body)
 }
 
 const buildFunc = async <T>(ctx: Context, req: request.Request<T>) => {
@@ -123,8 +126,9 @@ const buildFunc = async <T>(ctx: Context, req: request.Request<T>) => {
             } else {
                 reqBodyFromInput(ctx, req)
             }
+        } else {
+            conf.getLogger().debug(util.format("[build]request:%s, not body", req))
         }
-        conf.getLogger().debug(util.format("[build]request:\n%s\nbody", req), req.httpRequestOpts.body)
     }
 }
 
@@ -141,21 +145,26 @@ const signFunc = async <T>(ctx: Context, req: request.Request<T>) => {
 
 const validateResponseFunc = async <T>(_: Context, req: request.Request<T>) => {
     let resp = req.httpResponse
+    let contentType = resp.headers.get(ContentType.toLowerCase())
     if (req.isResponseStream) {
+        if (contentType && contentType.indexOf(ContentTypeJson) > -1) {
+            req.isResponseStreamReal = false;
+            return
+        }
         if (!resp.ok) {
             throw newErrorOfInvalidResp(util.format("response is stream, but status code:%d", resp.status))
         }
+        req.isResponseStreamReal = true;
         return
     }
-    let contentType = resp.headers.get(ContentType.toLowerCase())
-    if (contentType.indexOf(ContentTypeJson) === -1) {
+    if (!contentType || contentType.indexOf(ContentTypeJson) === -1) {
         throw newErrorOfInvalidResp(util.format("content-type: %s, is not: %s, if is stream, please `OapiApi.setIsResponseStream()`, body:%s", contentType, ContentTypeJson, resp.body.toString()))
     }
 }
 
 export const unmarshalResponseFunc = async <T>(ctx: Context, req: request.Request<T>) => {
     let resp = req.httpResponse
-    if (req.isResponseStream) {
+    if (req.isResponseStreamReal) {
         if (req.output && req.output instanceof stream.Writable) {
             resp.body.pipe(req.output)
             return
@@ -165,7 +174,7 @@ export const unmarshalResponseFunc = async <T>(ctx: Context, req: request.Reques
         return
     }
     let json = await resp.json()
-    getConfigByCtx(ctx).getLogger().debug(util.format("[unmarshalResponse] request:%s\nresponse:\nbody:",
+    getConfigByCtx(ctx).getLogger().debug(util.format("[unmarshalResponse] request:%s, response:body:",
         req), json)
     if (req.isNotDataField) {
         req.output = json
@@ -186,6 +195,15 @@ export const applyAppTicket = async (ctx: Context) => {
 }
 
 const complementFunc = async <T>(ctx: Context, req: request.Request<T>) => {
+    let conf = getConfigByCtx(ctx)
+    let bodySource = req.httpRequestOpts.bodySource
+    if (bodySource && bodySource.isStream) {
+        try {
+            fs.unlinkSync(bodySource.filePath)
+        } catch (err) {
+            conf.getLogger().info(util.format("[complement] request:%s, delete tmp file(%s) err: ", req.toString()), bodySource.filePath, err)
+        }
+    }
     if (req.err && instanceOfError(req.err)) {
         switch (req.err.code) {
             case ErrCode.AppTicketInvalid:

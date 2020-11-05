@@ -125,6 +125,9 @@
     
         const fs = require("fs")
         // 上传图片
+        // 使用流的方式
+        // let data = fs.createReadStream('./test.png');
+        // 使用字节的方式
         let data = fs.readFileSync('./test.png');
         let formData = new OapiApi.FormData()
         formData.setField("image_type", "message")
