@@ -6,7 +6,7 @@ import {
     Response, throwTokenInvalidErr
 } from "@larksuiteoapi/core";
 import {Header, HTTPCard, HeaderKey, Card} from "../model/card";
-import {NotHandlerErr, SignatureErr} from "./err";
+import {NotFoundHandlerErr, SignatureErr} from "./err";
 import * as util from 'util'
 import {getHandler} from "../card";
 
@@ -97,7 +97,7 @@ const handlerFunc = async (ctx: Context, httpCard: HTTPCard) => {
     let conf = getConfigByCtx(ctx)
     let h = getHandler(conf)
     if (!h) {
-        throw new NotHandlerErr();
+        throw new NotFoundHandlerErr();
     }
     httpCard.output = await h(ctx, <Card>httpCard.input)
 }
@@ -114,7 +114,7 @@ const complementFunc = async (ctx: Context, httpCard: HTTPCard) => {
     let conf = getConfigByCtx(ctx)
     let err = httpCard.err
     if (err) {
-        if (err instanceof NotHandlerErr) {
+        if (err instanceof NotFoundHandlerErr) {
             conf.getLogger().error(err)
             writeHTTPResponse(httpCard, 500, util.format(responseFormat, err))
             return;
@@ -129,7 +129,7 @@ const complementFunc = async (ctx: Context, httpCard: HTTPCard) => {
     }
     if (httpCard.output) {
         let output = ""
-        if (httpCard.output == "string") {
+        if (typeof httpCard.output == "string") {
             output = httpCard.output
         } else {
             output = JSON.stringify(httpCard.output)

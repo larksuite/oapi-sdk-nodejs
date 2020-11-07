@@ -1,6 +1,6 @@
 import * as util from "util"
 
-export class NotHandlerErr {
+export class NotFoundHandlerErr {
     eventType: string
 
     constructor(eventType: string) {
@@ -8,6 +8,6 @@ export class NotHandlerErr {
     }
 
     toString(): string {
-        return util.format("event type:%s, not find handler", this.eventType)
+        return util.format("event type:%s, not found handler", this.eventType)
     }
 }

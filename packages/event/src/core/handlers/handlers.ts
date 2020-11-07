@@ -1,6 +1,6 @@
 import * as util from "util";
 import {getEventType2Handler, Handler} from "../../event";
-import {NotHandlerErr} from "./err";
+import {NotFoundHandlerErr} from "./err";
 import {
     AESCipher,
     CallbackType, ContentType,
@@ -73,7 +73,7 @@ const handlerFunc = async (ctx: Context, httpEvent: HTTPEvent) => {
         handler = eventType2Handler.m.get(httpEvent.eventType)
     }
     if (!handler) {
-        throw new NotHandlerErr(httpEvent.eventType)
+        throw new NotFoundHandlerErr(httpEvent.eventType)
     }
     let input: V1<any> | V2<any>
     if (httpEvent.schema == Version1) {
@@ -95,7 +95,7 @@ const writeHTTPResponse = (httpEvent: HTTPEvent, statusCode: number, body: strin
 const complementFunc = async (ctx: Context, httpEvent: HTTPEvent) => {
     let conf = getConfigByCtx(ctx)
     if (httpEvent.err) {
-        if (httpEvent.err instanceof NotHandlerErr) {
+        if (httpEvent.err instanceof NotFoundHandlerErr) {
             conf.getLogger().info(httpEvent.err)
             writeHTTPResponse(httpEvent, 200, util.format(responseFormat, httpEvent.err))
             return

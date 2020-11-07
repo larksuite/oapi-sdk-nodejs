@@ -1,6 +1,6 @@
-export class NotHandlerErr implements Error {
-    name: string = "NotHandlerErr"
-    message: string = "not find handler"
+export class NotFoundHandlerErr implements Error {
+    name: string = "NotFoundHandlerErr"
+    message: string = "card, not found handler"
 
     toString(): string {
         return this.message
@@ -9,7 +9,7 @@ export class NotHandlerErr implements Error {
 
 export class SignatureErr implements Error {
     name: string = "SignatureErr"
-    message: string = "signature Err"
+    message: string = "signature error"
 
     toString(): string {
         return this.message
