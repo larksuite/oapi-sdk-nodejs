@@ -12,6 +12,14 @@ export class Context {
         return this.m.get(key)
     }
 
+    setRequestID(logID: string, requestID: string): void {
+        if (logID) {
+            this.set(HTTPHeaderKeyRequestID, logID)
+            return
+        }
+        this.set(HTTPHeaderKeyRequestID, requestID)
+    }
+
     set(key: string, value: any): void {
         this.m.set(key, value)
     }

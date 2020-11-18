@@ -12,7 +12,6 @@ export interface Header {
     nonce: string
     signature: string
     refresh_token: string
-    request_id: string
 }
 
 export class HTTPCard {

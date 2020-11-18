@@ -2,7 +2,7 @@ import {
     CallbackType, ContentType,
     Context, DefaultContentType,
     getConfigByCtx,
-    HTTPHeaderKeyRequestID,
+    HTTPHeaderKeyRequestID, HTTPHeaderKeyLogID,
     Response, throwTokenInvalidErr
 } from "@larksuiteoapi/core";
 import {Header, HTTPCard, HeaderKey, Card} from "../model/card";
@@ -36,13 +36,14 @@ class Handlers {
 const initFunc = async (ctx: Context, httpCard: HTTPCard) => {
     let request = httpCard.request
     let header: Header = {
-        request_id: <string>request.headers[HTTPHeaderKeyRequestID.toLowerCase()],
         timestamp: <string>request.headers[HeaderKey.LarkRequestTimestamp.toLowerCase()],
         nonce: <string>request.headers[HeaderKey.LarkRequestRequestNonce.toLowerCase()],
         signature: <string>request.headers[HeaderKey.LarkSignature.toLowerCase()],
         refresh_token: <string>request.headers[HeaderKey.LarkRefreshToken.toLowerCase()],
     }
-    ctx.set(HTTPHeaderKeyRequestID, header.request_id)
+    let logID = <string>request.headers[HTTPHeaderKeyLogID.toLowerCase()]
+    let requestID = <string>request.headers[HTTPHeaderKeyRequestID.toLowerCase()]
+    ctx.setRequestID(logID, requestID)
     ctx.set(HeaderKey.LarkRequestTimestamp, header.timestamp)
     ctx.set(HeaderKey.LarkRequestRequestNonce, header.nonce)
     ctx.set(HeaderKey.LarkSignature, header.signature)

@@ -5,7 +5,7 @@ const OapiEvent = require("@larksuiteoapi/event")
 // const conf = GetConfig(...)
 
 // for test
-const conf = OapiCore.getTestInternalConf("online")
+const conf = OapiCore.getTestISVConf("staging")
 
 OapiEvent.setTypeHandler(conf, "app_status_change", (ctx, event) => {
     let conf = OapiCore.getConfigByCtx(ctx);

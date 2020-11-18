@@ -20,7 +20,7 @@ import {
     ContentTypeJson,
     Context,
     DefaultContentType,
-    getConfigByCtx, HTTPHeaderKeyRequestID, HTTPKeyStatusCode,
+    getConfigByCtx, HTTPHeaderKeyRequestID, HTTPHeaderKeyLogID, HTTPKeyStatusCode,
     SdkVersion
 } from "@larksuiteoapi/core";
 import * as fs from "fs";
@@ -175,7 +175,7 @@ export const unmarshalResponseFunc = async <T>(ctx: Context, req: request.Reques
     }
     let json = await resp.json()
     getConfigByCtx(ctx).getLogger().debug(util.format("[unmarshalResponse] request:%s, response:body:",
-        req), json)
+        req), JSON.stringify(json))
     if (req.isNotDataField) {
         req.output = json
     } else {
@@ -247,8 +247,9 @@ export class Handlers {
             req.httpRequestOpts.body = fs.createReadStream(bodySource.filePath)
         }
         req.httpResponse = await fetch(req.fullUrl(conf.getDomain()), req.httpRequestOpts)
+        let logID = req.httpResponse.headers.get(HTTPHeaderKeyLogID.toLowerCase())
         let requestID = req.httpResponse.headers.get(HTTPHeaderKeyRequestID.toLowerCase())
-        ctx.set(HTTPHeaderKeyRequestID, requestID)
+        ctx.setRequestID(logID, requestID)
         ctx.set(HTTPKeyStatusCode, req.httpResponse.status)
         await this.validateResponse(ctx, req)
         await this.unmarshalResponse(ctx, req)

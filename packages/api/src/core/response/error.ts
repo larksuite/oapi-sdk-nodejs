@@ -39,14 +39,20 @@ export interface Help {
     [propName: string]: any
 }
 
-
-export interface Error {
-    code: number
-    msg: string
+export interface Err {
     details?: Detail[]
     permission_violations?: PermissionViolation[]
     field_violations?: FieldViolation[]
     helps?: Help[]
+
+    [propName: string]: any
+}
+
+
+export interface Error {
+    code: number
+    msg: string
+    error?: Err
 
     [propName: string]: any
 }

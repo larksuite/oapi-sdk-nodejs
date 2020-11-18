@@ -3,6 +3,7 @@ export const ContentTypeJson = "application/json"
 export const DefaultContentType = ContentTypeJson + "; charset=utf-8"
 
 export const HTTPHeaderKeyRequestID = "X-Request-Id"
+export const HTTPHeaderKeyLogID = "X-Log-Id"
 export const HTTPKeyStatusCode = "http_status_code"
 
 
