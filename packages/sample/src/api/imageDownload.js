@@ -1,26 +1,18 @@
-const OapiCore = require("@larksuiteoapi/core");
-const OapiApi = require("@larksuiteoapi/api")
+const lark = require("@larksuiteoapi/allcore");
 const fs = require("fs")
-// for online
-// import {GetConfig} from "../config/config";
-// const conf = GetConfig(...)
 
 // for test
-const conf = OapiCore.getTestInternalConf("online")
+const conf = lark.core.getTestInternalConf("online")
 let queryParams = {
-    image_key: "img_xxxxxxxxxxxxxxxxxxxxx"
+    image_key: "img_5ac0852d-b3f2-4dc8-9dde-c5135cabe13g"
 }
-let req = OapiApi.newRequest("image/v4/get", "GET",
-    OapiApi.AccessTokenType.Tenant, undefined, OapiApi.setQueryParams(queryParams), OapiApi.setIsResponseStream())
-let ctx = new OapiCore.Context()
-OapiApi.send(ctx, conf, req).then(buf => {
-    fs.writeFileSync("./test.0.png", buf)
-    console.debug(ctx.getRequestID())
-    console.debug(ctx.getHTTPStatusCode())
+
+let req = lark.api.newRequest("image/v4/get", "GET",
+    lark.api.AccessTokenType.Tenant, undefined, lark.api.setQueryParams(queryParams), lark.api.setIsResponseStream())
+lark.api.sendRequest(conf, req).then(r => {
+    fs.writeFileSync("./test.0.png", r.data)
+    console.debug(r.getRequestID())
+    console.debug(r.getHTTPStatusCode())
 }).catch(e => {
-    console.error(ctx.getRequestID())
-    console.error(ctx.getHTTPStatusCode())
-    console.error(e.code)
-    console.error(e.msg)
     console.error(e)
 })

@@ -16,7 +16,7 @@ export class AESCipher {
             this.key,
             encryptBuffer.slice(0, 16),
         )
-        let decrypted = decipher.update(encryptBuffer.slice(16), 'hex', 'utf8')
+        let decrypted = decipher.update(encryptBuffer.slice(16).toString('hex'), 'hex', 'utf8')
         decrypted += decipher.final('utf8')
         return decrypted
     }

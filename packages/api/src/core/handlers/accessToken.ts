@@ -9,7 +9,6 @@ import {
 import * as request from "../request/request"
 import {handle} from "./handlers";
 import * as util from "util"
-import {Request} from "../request/request";
 import {URL} from "../constants/constants";
 import {
     getAppAccessTokenKey,
@@ -18,17 +17,10 @@ import {
     getConfigByCtx,
     getTenantAccessTokenKey
 } from "@larksuiteoapi/core";
-import {throwAppTicketIsEmptyErr} from "../errors/errors";
+import {throwAppTicketIsEmptyErr, AccessTokenObtainErr} from "../errors/errors";
+import {ErrCode} from "../response/error";
 
 const expiryDelta = 3 * 60
-
-const send = async <T>(ctx: common.Context, req: Request<T>) => {
-    let t = await handle(ctx, req)
-    if (req.err) {
-        throw req.err
-    }
-    return t
-}
 
 // get internal app access token
 export const getInternalAppAccessToken = async (ctx: common.Context) => {
@@ -36,7 +28,11 @@ export const getInternalAppAccessToken = async (ctx: common.Context) => {
     let conf = getConfigByCtx(ctx)
     let req = request.newRequestByAuth(URL.AppAccessTokenInternalUrlPath, "POST",
         new GetInternalAccessTokenReq(conf.getAppSettings().appID, conf.getAppSettings().appSecret), accessToken)
-    return await send(ctx, req)
+    let response = await handle(ctx, req)
+    if (response.code != ErrCode.Ok) {
+        throw new AccessTokenObtainErr("obtain internal app access token，failure information:" + req.response.toString(), req.response)
+    }
+    return response.data
 }
 
 // get internal tenant access token
@@ -45,7 +41,11 @@ export const getInternalTenantAccessToken = async (ctx: common.Context) => {
     let conf = getConfigByCtx(ctx)
     let req = request.newRequestByAuth(URL.TenantAccessTokenInternalUrlPath, "POST",
         new GetInternalAccessTokenReq(conf.getAppSettings().appID, conf.getAppSettings().appSecret), accessToken)
-    return await send(ctx, req)
+    let response = await handle(ctx, req)
+    if (response.code != ErrCode.Ok) {
+        throw new AccessTokenObtainErr("obtain internal tenant access token，failure information:" + req.response.toString(), req.response)
+    }
+    return response.data
 }
 
 const getAppTicket = async (ctx: common.Context) => {
@@ -63,7 +63,11 @@ export const getIsvAppAccessToken = async (ctx: common.Context) => {
     let conf = getConfigByCtx(ctx)
     let req = request.newRequestByAuth(URL.AppAccessTokenIsvUrlPath, "POST",
         new GetISVAppAccessTokenReq(conf.getAppSettings().appID, conf.getAppSettings().appSecret, appTicket), accessToken)
-    return await send(ctx, req)
+    let response = await handle(ctx, req)
+    if (response.code != ErrCode.Ok) {
+        throw new AccessTokenObtainErr("obtain ISV app access token，failure information:" + req.response.toString(), req.response)
+    }
+    return response.data
 }
 
 export const setAppAccessTokenToStore = async (ctx: common.Context, appAccessToken: AppAccessToken) => {
@@ -82,7 +86,11 @@ export const getIsvTenantAccessToken = async (ctx: common.Context) => {
     let tenantAccessToken: TenantAccessToken
     let req = request.newRequestByAuth(URL.TenantAccessTokenIsvUrlPath, "POST",
         new GetISVTenantAccessTokenReq(appAccessToken.app_access_token, info.tenantKey), tenantAccessToken)
-    tenantAccessToken = await send(ctx, req)
+    let response = await handle(ctx, req)
+    if (response.code != ErrCode.Ok) {
+        throw new AccessTokenObtainErr("obtain ISV tenant access token，failure information:" + req.response.toString(), req.response)
+    }
+    tenantAccessToken = response.data
     let res: [AppAccessToken, TenantAccessToken] = [appAccessToken, tenantAccessToken]
     return res
 }

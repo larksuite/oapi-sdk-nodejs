@@ -1,6 +1,7 @@
 import * as util from "util"
 import * as request from "../request/request"
 import * as formdata from "../request/formData"
+import * as response from "../response/response"
 
 import {
     AppTicketIsEmptyErr,
@@ -10,7 +11,7 @@ import {
 } from "../errors/errors";
 import fetch from 'node-fetch';
 import FormData from "form-data";
-import {ErrCode, instanceOfError, newErrorOfInvalidResp, retryable} from "../response/error";
+import {Error, ErrCode, newErrorOfInvalidResp} from "../response/error";
 import {ApplyAppTicketReq} from "../token/token";
 import {setAppAccessToken, setTenantAccessToken, setUserAccessToken} from "./accessToken";
 import {URL} from "../constants/constants";
@@ -51,7 +52,7 @@ const validateFunc = async <T>(ctx: Context, req: request.Request<T>) => {
         if (req.accessTokenType === request.AccessTokenType.Tenant && !req.tenantKey) {
             throwTenantKeyIsEmptyErr()
         }
-        if (req.accessTokenType === request.AccessTokenType.User && !req.userAccessToken && !req.userID) {
+        if (req.accessTokenType === request.AccessTokenType.User && !req.userAccessToken) {
             throwUserAccessTokenKeyIsEmptyErr()
         }
     }
@@ -167,23 +168,36 @@ export const unmarshalResponseFunc = async <T>(ctx: Context, req: request.Reques
     if (req.isResponseStreamReal) {
         if (req.output && req.output instanceof stream.Writable) {
             resp.body.pipe(req.output)
+            req.response.data = req.output
             return
         }
         let body = await resp.buffer()
         req.output = body as any
+        req.response.data = req.output
         return
     }
     let json = await resp.json()
     getConfigByCtx(ctx).getLogger().debug(util.format("[unmarshalResponse] request:%s, response:body:",
         req), JSON.stringify(json))
+    req.retryable = retryable(json.code)
+    req.response.setBody(json)
     if (req.isNotDataField) {
-        req.output = json
+        req.response.data = json
     } else {
-        req.output = json["data"]
+        req.response.data = json["data"]
     }
-    if (json.code != ErrCode.Ok) {
-        req.err = json
+}
+
+const retryable = (code: number): boolean => {
+    let b = false
+    switch (code) {
+        case ErrCode.AccessTokenInvalid:
+        case ErrCode.AppAccessTokenInvalid:
+        case ErrCode.TenantAccessTokenInvalid:
+            b = true
+            break
     }
+    return b
 }
 
 // apply app ticket
@@ -194,7 +208,7 @@ export const applyAppTicket = async (ctx: Context) => {
     await handle(ctx, req)
 }
 
-const complementFunc = async <T>(ctx: Context, req: request.Request<T>) => {
+const deleteTmpFile = async <T>(ctx: Context, req: request.Request<T>) => {
     let conf = getConfigByCtx(ctx)
     let bodySource = req.httpRequestOpts.bodySource
     if (bodySource && bodySource.isStream) {
@@ -204,17 +218,19 @@ const complementFunc = async <T>(ctx: Context, req: request.Request<T>) => {
             conf.getLogger().info(util.format("[complement] request:%s, delete tmp file(%s) err: ", req.toString()), bodySource.filePath, err)
         }
     }
-    if (req.err && instanceOfError(req.err)) {
-        switch (req.err.code) {
-            case ErrCode.AppTicketInvalid:
-                await applyAppTicket(ctx)
-                break
-        }
-    } else {
-        if (req.err instanceof AppTicketIsEmptyErr) {
+}
+
+const complement = async <T>(ctx: Context, req: request.Request<T>, err: Error) => {
+    await deleteTmpFile(ctx, req)
+    if (err) {
+        if (err instanceof AppTicketIsEmptyErr) {
             await applyAppTicket(ctx)
-            return
         }
+        throw err
+    }
+    if (req.response && req.response.code == ErrCode.AppTicketInvalid) {
+        await applyAppTicket(ctx)
+        return
     }
 }
 
@@ -225,20 +241,18 @@ export class Handlers {
     sign: handler
     validateResponse: handler
     unmarshalResponse: handler
-    complement: handler
 
     constructor(init: handler, validate: handler, build: handler, sign: handler, validateResponse: handler,
-                unmarshalResponse: handler, complement: handler) {
+                unmarshalResponse: handler) {
         this.init = init
         this.validate = validate
         this.build = build
         this.sign = sign
         this.validateResponse = validateResponse
         this.unmarshalResponse = unmarshalResponse
-        this.complement = complement
     }
 
-    private send0 = async <T>(ctx: Context, req: request.Request<T>) => {
+    private _send = async <T>(ctx: Context, req: request.Request<T>) => {
         let conf = getConfigByCtx(ctx)
         await this.build(ctx, req)
         await this.sign(ctx, req)
@@ -247,6 +261,7 @@ export class Handlers {
             req.httpRequestOpts.body = fs.createReadStream(bodySource.filePath)
         }
         req.httpResponse = await fetch(req.fullUrl(conf.getDomain()), req.httpRequestOpts)
+        req.response = new response.Response<T>(ctx)
         let logID = req.httpResponse.headers.get(HTTPHeaderKeyLogID.toLowerCase())
         let requestID = req.httpResponse.headers.get(HTTPHeaderKeyRequestID.toLowerCase())
         ctx.setRequestID(logID, requestID)
@@ -261,30 +276,27 @@ export class Handlers {
         do {
             i++
             if (req.retryable) {
-                conf.getLogger().debug(util.format("[retry] request:%s, err: ", req.toString()), req.err)
-                req.err = undefined
+                conf.getLogger().debug(util.format("[retry] request:%s, response: ", req.toString()), req.response.toString())
             }
-            await this.send0(ctx, req)
-            if (req.err && instanceOfError(req.err)) {
-                req.retryable = retryable(req.err)
-            }
+            await this._send(ctx, req)
         } while (req.retryable && i <= defaultMaxRetryCount)
     }
 }
 
-export const Default = new Handlers(initFunc, validateFunc, buildFunc, signFunc, validateResponseFunc, unmarshalResponseFunc, complementFunc)
+export const Default = new Handlers(initFunc, validateFunc, buildFunc, signFunc, validateResponseFunc, unmarshalResponseFunc)
 
 export const handle = async <T>(ctx: Context, req: request.Request<T>) => {
+    let err: Error
     try {
         await Default.init(ctx, req)
         await Default.validate(ctx, req)
         await Default.send(ctx, req)
     } catch (e) {
-        req.err = e
+        err = e
     } finally {
-        await Default.complement(ctx, req)
+        await complement(ctx, req, err)
     }
-    return req.output
+    return req.response
 }
 
 

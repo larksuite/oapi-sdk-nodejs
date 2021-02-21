@@ -1,6 +1,6 @@
 {
   "name": "@larksuiteoapi/simple",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "larksuite open api simple sdk",
   "keywords": [
     "feishu",
@@ -33,10 +33,7 @@
     "build:clean": "rm -rf ./dist"
   },
   "dependencies": {
-    "@larksuiteoapi/api": "1.0.5",
-    "@larksuiteoapi/core": "1.0.5",
-    "@larksuiteoapi/event": "1.0.5",
-    "@larksuiteoapi/card": "1.0.5",
+    "@larksuiteoapi/allcore": "1.0.6",
     "async-redis": "^1.1.7",
     "body-parser": "^1.19.0",
     "express": "^4.17.1"

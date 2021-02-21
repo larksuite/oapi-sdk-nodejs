@@ -1,6 +1,3 @@
-import {Config, Context} from "@larksuiteoapi/core";
-import {UserIDType} from "../constants/constants";
-
 export class GetISVTenantAccessTokenReq {
     app_access_token: string
     tenant_key: string

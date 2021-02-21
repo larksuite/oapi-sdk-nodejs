@@ -1,5 +1,4 @@
-const OapiCore = require("@larksuiteoapi/core");
-const OapiEvent = require("@larksuiteoapi/event")
+const lark = require("@larksuiteoapi/allcore");
 const express = require('express');
 const bodyParser = require('body-parser');
 // for online
@@ -7,20 +6,20 @@ const bodyParser = require('body-parser');
 // const conf = GetConfig(...)
 
 // for test
-const conf = OapiCore.getTestISVConf("staging")
+const conf = lark.core.getTestISVConf("staging")
 
 console.log(conf)
 
-OapiEvent.setTypeHandler(conf, "app_status_change", (ctx, event) => {
-    let conf = OapiCore.getConfigByCtx(ctx);
+lark.event.setTypeHandler(conf, "app_status_change", (ctx, event) => {
+    let conf = lark.core.getConfigByCtx(ctx);
     console.log(conf);
     console.log("----------------");
     console.log(ctx.getRequestID());
     console.log(event);
 })
 
-OapiEvent.setTypeHandler(conf, "user.created_v2", (ctx, event) => {
-    let conf = OapiCore.getConfigByCtx(ctx);
+lark.event.setTypeHandler(conf, "user.created_v2", (ctx, event) => {
+    let conf = lark.core.getConfigByCtx(ctx);
     console.log(conf);
     console.log("----------------");
     console.log(ctx.getRequestID());
@@ -32,12 +31,12 @@ const app = express();
 app.use(bodyParser());
 
 app.post('/webhook/event', (req, res) => {
-    const request = new OapiCore.Request()
+    const request = new lark.core.Request()
     Object.entries(req.headers).forEach(([k, v]) => {
         request.headers[k] = v
     })
     request.body = req.body
-    OapiEvent.httpHandle(conf, request, undefined).then(response => {
+    lark.event.httpHandle(conf, request, undefined).then(response => {
         res.status(response.statusCode).send(response.body)
     })
 });

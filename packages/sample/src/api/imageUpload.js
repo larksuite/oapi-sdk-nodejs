@@ -1,31 +1,22 @@
-const OapiCore = require("@larksuiteoapi/core");
-const OapiApi = require("@larksuiteoapi/api")
+const lark = require("@larksuiteoapi/allcore");
 const fs = require("fs")
-// for online
-// import {GetConfig} from "../config/config";
-// const conf = GetConfig(...)
 
 // for test
-const conf = OapiCore.getTestInternalConf("online")
+const conf = lark.core.getTestInternalConf("online")
 
 // upload image
 // use stream
 // let data = fs.createReadStream('./test.png');
 // use byte[]
 let data = fs.readFileSync('./test.png');
-let formData = new OapiApi.FormData()
-formData.setField("image_type", "message")
-formData.appendFile(new OapiApi.File().setContent(data).setFieldName("image").setType("image/jpeg"))
-let req = OapiApi.newRequest("image/v4/put", "POST", OapiApi.AccessTokenType.Tenant, formData)
-let ctx = new OapiCore.Context()
-OapiApi.send(ctx, conf, req).then(result => {
-    console.log(result)
-    console.debug(ctx.getRequestID())
-    console.debug(ctx.getHTTPStatusCode())
+let formData = new lark.api.FormData()
+formData.addField("image_type", "message")
+formData.addFile("image", new lark.api.File().setContent(data).setType("image/jpeg"))
+let req = lark.api.newRequest("image/v4/put", "POST", lark.api.AccessTokenType.Tenant, formData)
+lark.api.sendRequest(conf, req).then(r => {
+    console.debug(r.getRequestID())
+    console.debug(r.getHTTPStatusCode())
+    console.log(r)
 }).catch(e => {
-    console.error(ctx.getRequestID())
-    console.error(ctx.getHTTPStatusCode())
-    console.error(e.code)
-    console.error(e.msg)
     console.error(e)
 })

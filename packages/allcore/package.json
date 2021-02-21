@@ -1,7 +1,7 @@
 {
-  "name": "@larksuiteoapi/core",
+  "name": "@larksuiteoapi/allcore",
   "version": "1.0.6",
-  "description": "larksuite open api core sdk",
+  "description": "larksuite open all core sdk",
   "keywords": [
     "feishu",
     "larksuite"
@@ -32,8 +32,15 @@
     "build": "npm run build:clean && tsc",
     "build:clean": "rm -rf ./dist"
   },
+  "dependencies": {
+    "@larksuiteoapi/api": "1.0.6",
+    "@larksuiteoapi/card": "1.0.6",
+    "@larksuiteoapi/core": "1.0.6",
+    "@larksuiteoapi/event": "1.0.6"
+  },
   "devDependencies": {
-    "@types/node": "^14.14.31",
+    "@types/node": "^14.6.4",
+    "@types/node-fetch": "^2.5.7",
     "ts-node": "^9.0.0",
     "typescript": "^3.9.7"
   }

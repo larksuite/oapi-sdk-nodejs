@@ -1,12 +1,12 @@
-import * as OapiCore from "@larksuiteoapi/core";
+import * as lark from "@larksuiteoapi/allcore";
 
 const asyncRedis = require("async-redis");
 
 // get application config
-export const GetConfig = (domain: OapiCore.Domain, appSetting: OapiCore.AppSettings, logLevel: OapiCore.LoggerLevel): OapiCore.Config => {
-    let logger = new OapiCore.ConsoleLogger()
+export const getConfig = (domain: lark.core.Domain, appSetting: lark.core.AppSettings, logLevel: lark.core.LoggerLevel): lark.core.Config => {
+    let logger = new lark.core.ConsoleLogger()
     let store = new RedisStore()
-    return OapiCore.newConfig(domain, appSetting, logger, logLevel, store)
+    return lark.core.newConfig(domain, appSetting, logger, logLevel, store)
 }
 
 const client = asyncRedis.createClient(6379, "127.0.0.1");
