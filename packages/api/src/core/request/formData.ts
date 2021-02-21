@@ -14,6 +14,17 @@ export class FormData {
         return this
     }
 
+    addField(k: string, v: string | number | boolean): FormData {
+        this.params.set(k, v)
+        return this
+    }
+
+    addFile(k: string, file: File): FormData {
+        file.setFieldName(k)
+        this.files.push(file)
+        return this
+    }
+
     appendFile(file: File): FormData {
         this.files.push(file)
         return this

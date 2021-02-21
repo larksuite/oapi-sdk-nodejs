@@ -1,5 +1,5 @@
 export enum ErrCode {
-    IO = -1,
+    Native = -1,
     Ok = 0,
     AppTicketInvalid = 10012,
     AccessTokenInvalid = 99991671,
@@ -61,22 +61,9 @@ export const instanceOfError = (object: any): object is Error => {
     return "code" in object && "msg" in object;
 }
 
-
-export const retryable = (err: Error): boolean => {
-    let b = false
-    switch (err.code) {
-        case ErrCode.AccessTokenInvalid:
-        case ErrCode.AppAccessTokenInvalid:
-        case ErrCode.TenantAccessTokenInvalid:
-            b = true
-            break
-    }
-    return b
-}
-
-export const newError = (e: any): Error => {
+export const newErr = (e: any): Error => {
     let err = {
-        code: ErrCode.IO,
+        code: ErrCode.Native,
         msg: e.toString(),
     }
     return err
@@ -84,7 +71,7 @@ export const newError = (e: any): Error => {
 
 export const newErrorOfInvalidResp = (msg: string): Error => {
     let err = {
-        code: ErrCode.IO,
+        code: ErrCode.Native,
         msg: msg,
     }
     return err

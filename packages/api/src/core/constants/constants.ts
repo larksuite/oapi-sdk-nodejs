@@ -7,9 +7,3 @@ export enum URL {
     TenantAccessTokenIsvUrlPath = "auth/v3/tenant_access_token",
     ApplyAppTicketPath = "auth/v3/app_ticket/resend"
 }
-
-export enum UserIDType {
-    Open = "open_id",
-    Union = "union_id",
-    User = "user_id"
-}

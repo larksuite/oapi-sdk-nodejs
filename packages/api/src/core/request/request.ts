@@ -1,7 +1,8 @@
 import * as querystring from "querystring"
 import * as util from "util"
 import * as fetch from 'node-fetch'
-import {OAPIRootPath, UserIDType} from "../constants/constants";
+import {OAPIRootPath} from "../constants/constants";
+import {Response} from "../response/response"
 import {Context, Domain} from "@larksuiteoapi/core";
 import * as stream from "stream";
 
@@ -16,22 +17,11 @@ export enum AccessTokenType {
     User = "user_access_token",
 }
 
-export class UserID {
-    typ: UserIDType
-    id: string
-
-    constructor(typ: UserIDType, id: string) {
-        this.typ = typ
-        this.id = id
-    }
-}
-
 export class Opt {
     isNotDataField: boolean
     pathParams: { [key: string]: any }
     queryParams: { [key: string]: any }
     userAccessToken: string
-    userID: UserID
     tenantKey: string
     timeoutOfMs: number
     isResponseStream: boolean
@@ -47,7 +37,6 @@ export class Info<T> {
     accessTokenType: AccessTokenType              // request access token type
     tenantKey: string
     userAccessToken: string                       // user access token
-    userID: UserID
     isNotDataField: boolean = false         // response body is not data field
     isResponseStream: boolean = false
     isResponseStreamReal: boolean = false
@@ -76,26 +65,6 @@ export const setUserAccessToken = function (userAccessToken: string): (opt: Opt)
         opt.userAccessToken = userAccessToken
     }
 }
-
-/*
-export const setUserID = function (id: string): (opt: Opt) => void {
-    return function (opt: Opt) {
-        opt.userID = new UserID(UserIDType.User, id)
-    }
-}
-
-export const setOpenID = function (id: string): (opt: Opt) => void {
-    return function (opt: Opt) {
-        opt.userID = new UserID(UserIDType.Open, id)
-    }
-}
-
-export const setUnionID = function (id: string): (opt: Opt) => void {
-    return function (opt: Opt) {
-        opt.userID = new UserID(UserIDType.Union, id)
-    }
-}
-*/
 
 export const setTenantKey = function (tenantKey: string): (opt: Opt) => void {
     return function (opt: Opt) {
@@ -147,7 +116,7 @@ export interface HTTPRequestOpts {
 export class Request<T> extends Info<T> {
     httpRequestOpts: HTTPRequestOpts
     httpResponse: fetch.Response
-    err: any
+    response: Response<T>
 
     url(): string {
         let path = util.format("/%s/%s", OAPIRootPath, this.httpPath)
@@ -183,11 +152,10 @@ export class Request<T> extends Info<T> {
             }
         }
         this.tenantKey = opt.tenantKey || ""
-        if (opt.userAccessToken || opt.userID) {
+        if (opt.userAccessToken) {
             if (this.accessibleTokenTypeSet.has(AccessTokenType.User)) {
                 this.accessTokenType = AccessTokenType.User
                 this.userAccessToken = opt.userAccessToken || ""
-                this.userID = opt.userID
             }
         }
         this.timeout = opt.timeoutOfMs || 30000
