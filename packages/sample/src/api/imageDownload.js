@@ -8,19 +8,15 @@ const fs = require("fs")
 // for test
 const conf = OapiCore.getTestInternalConf("online")
 let queryParams = {
-    image_key: "img_xxxxxxxxxxxxxxxxxxxxx"
+    image_key: "img_c1dc601a-9af7-4f03-95d3-00e84d5f5deg"
 }
+
 let req = OapiApi.newRequest("image/v4/get", "GET",
     OapiApi.AccessTokenType.Tenant, undefined, OapiApi.setQueryParams(queryParams), OapiApi.setIsResponseStream())
-let ctx = new OapiCore.Context()
-OapiApi.send(ctx, conf, req).then(buf => {
-    fs.writeFileSync("./test.0.png", buf)
-    console.debug(ctx.getRequestID())
-    console.debug(ctx.getHTTPStatusCode())
+OapiApi.sendRequest(conf, req).then(r => {
+    fs.writeFileSync("./test.0.png", r.data)
+    console.debug(r.getRequestID())
+    console.debug(r.getHTTPStatusCode())
 }).catch(e => {
-    console.error(ctx.getRequestID())
-    console.error(ctx.getHTTPStatusCode())
-    console.error(e.code)
-    console.error(e.msg)
     console.error(e)
 })

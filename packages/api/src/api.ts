@@ -95,7 +95,7 @@ export class BatchReqCall {
 }
 
 
-export class ReqCallResult<T> {
+export class APIReqCallResult<T> {
     reqCall: IReqCall<T>
     response: Response<T>
     err: any
@@ -125,17 +125,20 @@ export class APIReqCall<T> implements IReqCall<T> {
 
 export class BatchAPIReqCall<T> {
     private readonly reqCalls: IReqCall<T>[]
-    readonly reqCallResults: ReqCallResult<T>[]
+    readonly reqCallResults: APIReqCallResult<T>[]
 
-    constructor(reqCalls: IReqCall<T>[]) {
+    constructor(...reqCalls: ReqCaller<any>[]) {
         this.reqCalls = reqCalls
         this.reqCallResults = []
         for (let v of this.reqCalls) {
-            this.reqCallResults.push(new ReqCallResult(v))
+            this.reqCallResults.push(new APIReqCallResult(v))
         }
     }
 
     do = async () => {
+        if (this.reqCalls.length == 0) {
+            return this
+        }
         await Promise.all(this.reqCalls.map((reqCall: IReqCall<T>, index: number) => {
             return reqCall.do().then(result => {
                 this.reqCallResults[index].response = result

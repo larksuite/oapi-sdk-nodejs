@@ -8,7 +8,7 @@ const OapiApi = require("@larksuiteoapi/api")
 const conf = OapiCore.getTestInternalConf("online")
 
 // Two "OapiApi.ReqCall" cannot use the same "OapiCore.Context"
-let reqCall1 = new OapiApi.ReqCall(new OapiCore.Context(), conf, OapiApi.newRequest("message/v4/send1", "POST", OapiApi.AccessTokenType.Tenant, {
+let reqCall1 = new OapiApi.ReqCall(new OapiCore.Context(), conf, OapiApi.newRequest("message/v4/send", "POST", OapiApi.AccessTokenType.Tenant, {
     "user_id": "77bbc392",
     msg_type: "text",
     content: {

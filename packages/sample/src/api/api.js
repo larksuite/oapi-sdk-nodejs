@@ -4,7 +4,7 @@ const OapiApi = require("@larksuiteoapi/api")
 // for test
 const conf = OapiCore.getTestInternalConf("online")
 
-OapiApi.sendRequest(conf, OapiApi.newRequest("message/v4/send1", "POST", OapiApi.AccessTokenType.Tenant, {
+OapiApi.sendRequest(conf, OapiApi.newRequest("message/v4/send", "POST", OapiApi.AccessTokenType.Tenant, {
     "user_id": "77bbc392",
     msg_type: "text",
     content: {
@@ -14,7 +14,7 @@ OapiApi.sendRequest(conf, OapiApi.newRequest("message/v4/send1", "POST", OapiApi
     console.log("--------------------------")
     console.log(r.getRequestID())
     console.log(r.getHTTPStatusCode())
-    console.log(r)
+    console.log(r) // r = response.body
 }).catch(e => {
     console.log(e)
 })
