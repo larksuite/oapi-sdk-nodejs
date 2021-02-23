@@ -1,9 +1,5 @@
 const lark = require("@larksuiteoapi/allcore");
 
-// for online
-// import {GetConfig} from "../config/config";
-// const conf = GetConfig(...)
-
 // for test
 const conf = lark.core.getTestInternalConf("online")
 

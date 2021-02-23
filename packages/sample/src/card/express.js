@@ -1,9 +1,6 @@
 const lark = require("@larksuiteoapi/allcore");
 const express = require('express');
 const bodyParser = require('body-parser');
-// for online
-// import {GetConfig} from "../config/config";
-// const conf = GetConfig(...)
 
 // for test
 const conf = lark.core.getTestInternalConf("online")
