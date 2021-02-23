@@ -9,7 +9,10 @@
 |  sample  | 示例代码 |     |
 
 ## 安装
-npm install @larksuiteoapi/allcore
+
+```shell script
+  npm i @larksuiteoapi/allcore
+```
 
 ## core
 
@@ -21,6 +24,7 @@ npm install @larksuiteoapi/allcore
     ```javascript
       
       const lark = require("@larksuiteoapi/allcore")
+  
       // 创建应用配置，防止泄漏，建议将应用信息放在环境变量中。
       // appID：应用凭证中的App ID
       // appSecret：应用凭证中的App Secret
@@ -60,7 +64,7 @@ npm install @larksuiteoapi/allcore
     - 封装请求，如下：
       ```javascript
       
-        const lark.api = require("@larksuiteoapi/allcore")
+        const lark = require("@larksuiteoapi/allcore")
         
         // 创建请求
         // httpPath：API路径（`open-apis/`之后的路径），例如：https://{domain}/open-apis/authen/v1/user_info，则 httpPath："authen/v1/user_info"
@@ -83,8 +87,7 @@ npm install @larksuiteoapi/allcore
         - lark.api.sendRequestRequest，可能会 throw error
   ```javascript
       
-      const lark.api = require("@larksuiteoapi/api")
-      const lark.core = require("@larksuiteoapi/core")
+      const lark = require("@larksuiteoapi/allcore")
      
       let conf = xxx //lark.core.Config
       

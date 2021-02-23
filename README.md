@@ -12,9 +12,9 @@
 
 ## installation
 
-  ```shell script
-  npm install @larksuiteoapi/allcore
-  ``` 
+```shell script
+  npm i @larksuiteoapi/allcore
+```
 
 ## core
 
