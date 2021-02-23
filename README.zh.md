@@ -118,9 +118,9 @@
       // 使用字节的方式
       let data = fs.readFileSync('./test.png');
       let formData = new lark.api.FormData()
-      formData.setField("image_type", "message")
-      // 追加文件，如果接口支持多个文件上传，可以多次调用 formData.appendFile
-      formData.appendFile(new lark.api.File().setContent(data).setFieldName("image").setType("image/jpeg"))
+      formData.addField("image_type", "message")
+      // 添加文件，如果接口支持多个文件上传，可以多次调用 formData.addFile
+      formData.addFile("image", new lark.api.File().setContent(data).setType("image/jpeg"))
       let req = lark.api.newRequest("image/v4/put", "POST", lark.api.AccessTokenType.Tenant, formData)
       lark.api.sendRequest(conf, req).then(resp => {
           console.log(resp.getRequestID())
