@@ -1,14 +1,9 @@
-const OapiCore = require("@larksuiteoapi/core");
-const OapiApi = require("@larksuiteoapi/api")
-// for online
-// import {GetConfig} from "../config/config";
-// const conf = GetConfig(...)
+const lark = require("@larksuiteoapi/allcore");
 
 // for test
-const conf = OapiCore.getTestInternalConf("online")
+const conf = lark.core.getTestInternalConf("online")
 
-// Two "OapiApi.ReqCall" cannot use the same "OapiCore.Context"
-let reqCall1 = new OapiApi.APIReqCall(conf, OapiApi.newRequest("message/v4/send", "POST", OapiApi.AccessTokenType.Tenant, {
+let reqCall1 = new lark.api.APIReqCall(conf, lark.api.newRequest("message/v4/send", "POST", lark.api.AccessTokenType.Tenant, {
     "user_id": "77bbc392",
     msg_type: "text",
     content: {
@@ -16,7 +11,7 @@ let reqCall1 = new OapiApi.APIReqCall(conf, OapiApi.newRequest("message/v4/send"
     }
 }));
 
-let reqCall2 = new OapiApi.APIReqCall(conf, OapiApi.newRequest("message/v4/send", "POST", OapiApi.AccessTokenType.Tenant, {
+let reqCall2 = new lark.api.APIReqCall(conf, lark.api.newRequest("message/v4/send", "POST", lark.api.AccessTokenType.Tenant, {
     "user_id": "77bbc392",
     msg_type: "text",
     content: {
@@ -24,7 +19,7 @@ let reqCall2 = new OapiApi.APIReqCall(conf, OapiApi.newRequest("message/v4/send"
     }
 }));
 
-let batchReqCall = new OapiApi.BatchAPIReqCall(reqCall1, reqCall2);
+let batchReqCall = new lark.api.BatchAPIReqCall(reqCall1, reqCall2);
 
 batchReqCall.do().then(function (batchReqCall) {
     for (let result of batchReqCall.reqCallResults) {

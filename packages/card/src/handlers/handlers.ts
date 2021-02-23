@@ -55,8 +55,10 @@ const validateFunc = async (ctx: Context, httpCard: HTTPCard) => {
     let conf = getConfigByCtx(ctx)
     let body = httpCard.request.body
     let json: object
-    if (typeof body == "string" && httpCard.header.signature) {
-        verify(httpCard.header, conf.getAppSettings().verificationToken, body)
+    if (typeof body == "string") {
+        if (httpCard.header.signature) {
+            verify(httpCard.header, conf.getAppSettings().verificationToken, body)
+        }
         json = JSON.parse(body)
     } else {
         json = <object>body

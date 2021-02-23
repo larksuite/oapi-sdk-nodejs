@@ -1,14 +1,13 @@
-const OapiCore = require("@larksuiteoapi/core");
-const OapiEvent = require("@larksuiteoapi/event")
+const lark = require("@larksuiteoapi/allcore");
 // for online
 // import {GetConfig} from "../config/config";
 // const conf = GetConfig(...)
 
 // for test
-const conf = OapiCore.getTestISVConf("staging")
+const conf = lark.core.getTestISVConf("staging")
 
-OapiEvent.setTypeHandler(conf, "app_status_change", (ctx, event) => {
-    let conf = OapiCore.getConfigByCtx(ctx);
+lark.event.setTypeHandler(conf, "app_status_change", (ctx, event) => {
+    let conf = lark.core.getConfigByCtx(ctx);
     console.log(conf);
     console.log("----------------");
     console.log(ctx.getRequestID());
@@ -16,4 +15,4 @@ OapiEvent.setTypeHandler(conf, "app_status_change", (ctx, event) => {
 })
 
 // startup event http server, port: 8089
-OapiEvent.startServer(conf, 8089)
+lark.event.startServer(conf, 8089)

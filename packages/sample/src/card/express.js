@@ -1,5 +1,4 @@
-const OapiCore = require("@larksuiteoapi/core");
-const OapiCard = require("@larksuiteoapi/card")
+const lark = require("@larksuiteoapi/allcore");
 const express = require('express');
 const bodyParser = require('body-parser');
 // for online
@@ -7,11 +6,11 @@ const bodyParser = require('body-parser');
 // const conf = GetConfig(...)
 
 // for test
-const conf = OapiCore.getTestInternalConf("online")
+const conf = lark.core.getTestInternalConf("online")
 
 // set handler
-OapiCard.setHandler(conf, (ctx, card) => {
-    let conf = OapiCore.getConfigByCtx(ctx);
+lark.card.setHandler(conf, (ctx, card) => {
+    let conf = lark.core.getConfigByCtx(ctx);
     console.log(conf);
     console.log("----------------");
     console.log(ctx.getRequestID());
@@ -25,12 +24,12 @@ const app = express();
 app.use(bodyParser());
 
 app.post('/webhook/card', (req, res) => {
-    const request = new OapiCore.Request()
+    const request = new lark.core.Request()
     Object.entries(req.headers).forEach(([k, v]) => {
         request.headers[k] = v
     })
     request.body = req.body
-    OapiCard.httpHandle(conf, request, undefined).then(response => {
+    lark.card.httpHandle(conf, request, undefined).then(response => {
         console.log("=================\n", response.body);
         res.status(response.statusCode).send(response.body)
     })
