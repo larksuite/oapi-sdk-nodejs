@@ -108,7 +108,7 @@ const complementFunc = async (ctx: Context, httpEvent: HTTPEvent) => {
         writeHTTPResponse(httpEvent, 200, util.format(challengeResponseFormat, httpEvent.challenge))
         return
     }
-    writeHTTPResponse(httpEvent, 200, util.format(responseFormat, "successed"))
+    writeHTTPResponse(httpEvent, 200, util.format(responseFormat, "success"))
 }
 
 class Handlers {

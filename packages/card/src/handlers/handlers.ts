@@ -140,7 +140,7 @@ const complementFunc = async (ctx: Context, httpCard: HTTPCard) => {
         writeHTTPResponse(httpCard, 200, output)
         return
     }
-    writeHTTPResponse(httpCard, 200, util.format(responseFormat, "successed"))
+    writeHTTPResponse(httpCard, 200, util.format(responseFormat, "success"))
 }
 
 const defaultHandlers = new Handlers(initFunc, validateFunc, unmarshalFunc, handlerFunc, complementFunc)
