@@ -1,14 +1,16 @@
-[**中文**](README.zh.md)
+[**飞书，点这里**](README.zh.md) | Larksuite(Overseas)
 
-# larksuit open api sdk
+# LarkSuite open api SDK
 
-| Module    | description |     
-|--------------|--------------|
-|  core    | Application information configuration and some general methods  | 
-|  api     | Request the API of larksuite/feishu  | 
-|  event   | Monitor the business data of larksuite/feishu changes and events generated |  
-|  card    | Monitor the actions of message card interaction  |  
-|  sample  | Example |   
+## Overview
+
+---
+
+- Larksuite open platform facilitates the integration of enterprise applications and larksuite, making collaboration and
+  management more efficient.
+
+- Larksuite development interface SDK, convenient call server API and subscribe server events, such as: Message & group,
+  address book, calendar, docs and others can visit [larksuite open platform document](https://open.larksuite.cn/document) ,Take a look at [REFERENCE].
 
 ## installation
 
@@ -16,205 +18,260 @@
   npm i @larksuiteoapi/allcore
 ```
 
-## core
+## Explanation of terms
+- Larksuite: the overseas name of lark, which mainly provides services for overseas enterprises and has an independent [domain name address](https://www.larksuite.com/) .
+- Development documents: reference to the open interface of the open platform **developers must see, and can use search to query documents efficiently** . [more information](https://open.feishu.cn/document/) .
+- Developer background: the management background for developers to develop applications, [more introduction](https://open.larksuite.cn/app/) .
+- Cutome APP: the application can only be installed and used in the enterprise，[more introduction](https://open.larksuite.com/document/ukzMxEjL5MTMx4SOzETM/uEjNwYjLxYDM24SM2AjN) .
+- Marketplace App：The app will be displayed in [App Directory](https://app.larksuite.com/) Display, each enterprise can choose to install.
 
-- Instructions for use
-    - Get application configuration
-        - Provides [code samples to](packages/sample/src/config/config.ts) facilitate development
-            - Use redis to implement Store interface for maintenance `app_access_token`、`tenant_access_token` life cycle
-        - Instructions for the method are as follows:
-    ```javascript
-      
-      const lark = require("@larksuiteoapi/allcore")
-  
-      // Create application configuration to prevent leakage. It is recommended to put application information in environment variables. 
-      // appID: App ID in the application credential 
-      // appSecret: App Secret in the application credential 
-      // verificationToken: Verification Token in the event subscription 
-      // encryptKey: Encrypt Key in the event subscription, can be "", indicating that the event content is not Encryption 
-      // Settings of enterprise self-built apps
-      let appSettings = lark.core.newInternalAppSettings("[appID]", "[appSecret]", "[verificationToken]", "[encryptKey]")
-      // Settings of app store apps
-      let appSettings = lark.core.newISVAppSettings("[appID]", "[appSecret]", "[verificationToken]", "[encryptKey]")
-      
-      
-      // Create Config 
-      // domain: domain name http address: lark.core.Domain.FeiShu/lark.core.Domain.LarkSuite 
-      // appSettings: application configuration 
-      // logger: [log interface](packages/core/src/log/log.ts) 
-      // loggerLevel: output log level lark.core.LoggerLevel.DEBUG/INFO/WARN/ERROR (packages/core/src/log/log.ts) 
-      // store: [Store interface](packages/core/src/store/store .ts), used to store app_ticket/app_access_token/tenant_access_token 
-      // for online config
-      let conf = lark.core.newConfig(domain,appSettings,logger,loggerLevel,store)    
-      
-      // Config for development and testing 
-      // logger: use the default implementation (packages/core/src/log/log.ts) 
-      // loggerLevel: Debug level 
-      // store: use the default implementation (Map)
-      let conf = lark.core.newTestConfig(domain, appSettings)
-      
-    ```
+![App type](doc/app_type.en.png)
 
-  ## api
 
-    - Processing flow
-        - For `app_access_token`、`tenant_access_token`maintain the life cycle of acquisition and made a package, **developers can directly access the service API**
-          ![Processing flow](api_process.jpg)
+## Quick use
 
-    - Instructions for use
-        - For `App Store application`, when acquiring `app_access_token` , you need `app_ticket` to start the event
-          subscription service
-        - The package request is as follows:
-          ```javascript
-          
-            const lark = require("@larksuiteoapi/allcore")
-                
-            // Create request 
-            // httpPath: (path after `open-apis/`) API path, for example: https://{domain}/open-apis/authen/v1/user_info, the httpPath: "authen/v1/user_info" 
-            // httpMethod: GET/POST/PUT/BATCH/DELETE 
-            // accessTokenType: What kind of token access the API uses, value range: lark.api.AccessTokenType.App/Tenant/User, for example: lark.api.AccessTokenType.Tenant 
-            // input : The request body (may be formdata (for example: file upload)), if the request body is not needed (for example, some GET requests), pass: undefined 
-            // optFns: extension function, some infrequently used parameter packages, as follows: 
-                // lark.api.setPathParams({"user_id":4}): Set the URL Path parameter (with: prefix) value, when httpPath="users/:user_id", the requested URL="https://{domain}/open-apis/users/4" 
-                // lark.api.setQueryParams({"age":4,"types":[1,2]}): Set the URL qeury, it will be appended to the url?age=4&types=1&types=2 
-                // lark.api.setTimeoutOfMs(1000), set the http request, timeout time in milliseconds 
-                // lark.api.setIsResponseStream(), set whether the response is a stream, such as downloading a file, at this time: the output value is of Buffer type
-                // lark.api.setIsNotDataField (), set up in response to whether or not `data` field service interface are all` data` field, there is no need to set 
-                // lark.api.setTenantKey("TenantKey"), to `` ISV application status, indication `tenant_access_token` access API, you need to set 
-                // lark.api.setUserAccessToken("UserAccessToken"), represents the use of` user_access_token` access API, you need to set 
-            let req = lark.api.newRequest(httpPath: string, httpMethod: string, accessTokenType: AccessTokenType, input: any, ...optFns: OptFn[]))
-              
-          ```
-        - Send the request as follows:
-            - You can refer to the developer's documentation to know what fields the result (=http response body,
-              non-download file interface) has
-            - lark.api.send, may throw error
-      ```javascript
-          
-          const lark = require("@larksuiteoapi/allcore")
-         
-          let conf = xxx //lark.core.Config
-          
-          // Sending a message 
-          let req = lark.api.newRequest("message/v4/send", "POST", lark.api.AccessTokenType.Tenant, {
-                open_id: "open_id",
-                msg_type: "text",
-                content: {
-                  text: "test"
-                }
-            }, 
-          // If app is ISV, lark.api.setTenantKey("TenantKey"),
-          )
-          lark.api.sendRequest(conf, req).then(resp => {
-              console.log(resp.getRequestID())
-              console.log(resp.getHTTPStatusCode())
-              console.log(resp)
-          }).catch(e => {
-              console.error(e)
-          })
-      
-      
-          const fs = require("fs")
-          // Upload an image
-          // use stream
-          // let data = fs.createReadStream('./test.png');
-          // use byte[]
-          let data = fs.readFileSync('./test.png');
-          let formData = new lark.api.FormData()
-          formData.addField("image_type", "message")
-          // add file, if the interface supports multiple file upload, you can call formData.addFile many times
-          formData.addFile("image", new lark.api.File().setContent(data).setType("image/jpeg"))
-          let req = lark.api.newRequest("image/v4/put", "POST", lark.api.AccessTokenType.Tenant, formData)
-          lark.api.sendRequest(conf, req).then(resp=>{
-              console.log(resp.getRequestID())
-              console.log(resp.getHTTPStatusCode())
-              console.log(resp)
-          }).catch(e => {
-              console.error(e)
-          })
-          
-          // Download the image
-          let queryParams = {
-              image_key: "img_xxxxxxxxxxxxxxxxxx"
-          }
-          let req = lark.api.newRequest("image/v4/get", "GET",
-              lark.api.AccessTokenType.Tenant, undefined, lark.api.setQueryParams(queryParams), lark.api.setIsResponseStream())
-          lark.api.send(conf, req).then(resp=>{
-              console.log(resp.getRequestID())
-              console.log(resp.getHTTPStatusCode())
-              fs.writeFileSync("./test.0.png", resp.data)
-          }).catch(e => {
-              console.error(e)
-          })
-          
-      ```
-        - batch request call
-            - [code sample](https://github.com/larksuite/oapi-sdk-nodejs/blob/main/packages/sample/src/api/batchReqCall.js)
-    - Tool
-        - Download file (for example: picture)
-      ```javascript
-          const fs = require("fs")
-          const lark = require("@larksuiteoapi/allcore")
-          // Parameter 1: File URL
-          // Parameter 2: Request timeout (unit: milliseconds) 
-          lark.api.downloadFile("https://s0.pstatp.com/ee/lark-open/web/static/apply.226f11cb.png", 3000).then(buf => {
-              fs.writeFileSync("./test.png", buf)
-          })
-      ```   
+---
 
-## event
+### Call API
 
-- Processing flow
-    - It encapsulates `App Store application(ISV)` the `app_ticket` event (the event handler needs to be set again), to
-      save it Store
-    - Decryption of event data and verification of source reliability
+#### Example of using `Custom App` to access [send text message](https://open.larksuite.com/document/uMzMyEjLzMjMx4yMzITM/ugDN0EjL4QDNx4CO0QTM) API
 
-    - Instructions for use
-        - Event monitoring service started
-            - [Start with native http server](packages/sample/src/event/httpServer.js)
-            - [Start with Express](packages/sample/src/event/express.js)
-        - Set the event handler, for example:
-      ```javascript
-      
-      const lark = require("@larksuiteoapi/coreall")
-      const conf = xxx //lark.core.Config
-      
-      // Processing the "app_status_change" event 
-      // If you are processing other events, you only need to modify the "app_status_change". For the fields in the event, please refer to the open platform document 
-      lark.event.setTypeHandler(conf, "app_status_change", (ctx, event) => {
-          let conf = lark.core.getConfigByCtx(ctx);
-          console.log(conf);
-          console.log("----------------");
-          console.log(ctx.getRequestID());
-          console.log(event);
-      })
-      
-      ```
+- For more use examples, please see: [packages/sample/src/api](packages/sample/src/api)
 
-## card
+```javascript
+const lark = require("@larksuiteoapi/allcore");
 
-- Encapsulated
-    - Verification of the validity and source reliability of card data
-- Instructions for use
-    - Message card callback service started
-        - [Start with native http server](packages/sample/src/card/httpServer.js)
-        - [Start with Express](packages/sample/src/card/express.js)
-    - Set the card processor, for example:
-  ```javascript
-  
-  const lark = require("@larksuiteoapi/allcore")
-  const conf = xxx //lark.core.Config
-  
-  // handle the message callback cards, card in what fields, please refer to the open platform document
-  lark.card.setHandler(conf, (ctx, card) => {
-     let conf = lark.core.getConfigByCtx(ctx);
-     console.log(conf);
-     console.log("----------------");
-     console.log(ctx.getRequestID());
-     console.log(card.action);
-  })
-      
-  ```
+// Configuration of custom app, parameter description:
+// AppID、AppSecret: "Developer Console" -> "Credentials"（App ID、App Secret）
+// VerificationToken、EncryptKey："Developer Console" -> "Event Subscriptions"（Verification Token、Encrypt Key）
+const appSettings = lark.core.newInternalAppSettings("AppID", "AppSecret", "VerificationToken", "EncryptKey")
+
+// Currently, you are visiting larksuite, which uses default storage and default log (debug level). More optional configurations are as follows: config.NewConfig ()
+const conf = lark.core.newConfig(lark.core.Domain.LarkSuite, appSettings, new lark.core.ConsoleLogger(), lark.core.LoggerLevel.INFO, new lark.core.DefaultStore())
+
+// The content of the sent message
+const body = {
+    "open_id": "user open id",
+    "msg_type": "text",
+    "content": {
+        "text": "test send message",
+    },
+}
+// Build request
+const req = lark.api.newRequest("message/v4/send", "POST", lark.api.AccessTokenType.Tenant, body)
+// Send request 
+lark.api.sendRequest(conf, req).then(r => {
+    // Print the requestId of the request
+    console.log(r.getRequestID())
+    // Print the response status of the request
+    console.log(r.getHTTPStatusCode())
+    console.log(r) // r = response.body
+}).catch(e => {
+    // Error handling of request
+    console.log(e)
+})
+```
+
+### Subscribe to events
+
+- [Subscribe to events](https://open.larksuite.com/document/uMzMyEjLzMjMx4yMzITM/uETM4QjLxEDO04SMxgDN) , to understand
+  the process and precautions of subscribing to events.
+- For more use examples, please refer to [packages/sample/src/event](packages/sample/src/event)（including: use in combination with express）
+
+#### Example of using `Custom App` to subscribe [App First Enabled](https://open.larksuite.com/document/uMzMyEjLzMjMx4yMzITM/uYjMyYjL2IjM24iNyIjN) event.
+
+```javascript
+const lark = require("@larksuiteoapi/allcore");
+
+// Configuration of "Custom App", parameter description:
+// AppID、AppSecret: "Developer Console" -> "Credentials"（App ID、App Secret）
+// VerificationToken、EncryptKey："Developer Console" -> "Event Subscriptions"（Verification Token、Encrypt Key）
+const appSettings = lark.core.newInternalAppSettings("AppID", "AppSecret", "VerificationToken", "EncryptKey")
+
+// Currently, you are visiting larksuite, which uses default storage and default log (debug level). More optional configurations are as follows: config.NewConfig ()
+const conf = lark.core.newConfig(lark.core.Domain.FeiShu, appSettings, new lark.core.ConsoleLogger(), lark.core.LoggerLevel.INFO, new lark.core.DefaultStore())
+
+// Set the application event handler to be enabled for the first time
+lark.event.setTypeHandler(conf, "app_open", (ctx, event) => {
+    // Print the request ID of the request
+    console.log(ctx.getRequestID());
+    // Print event
+    console.log(event);
+})
+
+// Start the httpserver, "Developer Console" -> "Event Subscriptions", setting Request URL：https://domain
+// startup event http server, port: 8089
+lark.event.startServer(conf, 8089)
+
+```
+
+### Processing message card callbacks
+
+- [Message Card Development Process](https://open.larksuite.com/document/uMzMyEjLzMjMx4yMzITM/ukzM3QjL5MzN04SOzcDN) , to
+  understand the process and precautions of processing message cards
+- For more use examples, please refer to [packages/sample/src/card](packages/sample/src/card)（including: use in combination with express）
+
+#### Example of using `Custom App` to handling message card callback.
+
+```javascript
+const lark = require("@larksuiteoapi/allcore");
+
+// Configuration of "Custom App", parameter description:
+// AppID、AppSecret: "Developer Console" -> "Credentials"（App ID、App Secret）
+// VerificationToken、EncryptKey："Developer Console" -> "Event Subscriptions"（Verification Token、Encrypt Key）
+const appSettings = lark.core.newInternalAppSettings("AppID", "AppSecret", "VerificationToken", "EncryptKey")
+
+// Currently, you are visiting larksuite, which uses default storage and default log (debug level). More optional configurations are as follows: config.NewConfig ()
+const conf = lark.core.newConfig(lark.core.Domain.FeiShu, appSettings, new lark.core.ConsoleLogger(), lark.core.LoggerLevel.INFO, new lark.core.DefaultStore())
+
+// Set the handler of the message card
+// Return value: can be "", JSON string of new message card
+lark.card.setHandler(conf, (ctx, card) => {
+    // 打印消息卡片
+    console.log(card)
+    console.log(card.action)
+    return "{\"config\":{\"wide_screen_mode\":true},\"i18n_elements\":{\"zh_cn\":[{\"tag\":\"div\",\"text\":{\"tag\":\"lark_md\",\"content\":\"[飞书](https://www.feishu.cn)整合即时沟通、日历、音视频会议、云文档、云盘、工作台等功能于一体，成就组织和个人，更高效、更愉悦。\"}}]}}";
+})
+
+// Start the httpserver, "Developer Console" -> "Features" -> "Bot", setting Message Card Request URL: https://domain
+// startup event http server, port: 8089
+lark.event.startServer(conf, 8089)
+```
+
+## Advanced use
+
+---
+
+### How to build app settings(AppSettings)
+
+```javascript
+const lark = require("@larksuiteoapi/allcore");
+
+// To prevent application information leakage, in the configuration environment variables, the variables (4) are described as follows:
+// APP_ID: "Developer Console" -> "Credentials"（App ID）
+// APP_Secret: "Developer Console" -> "Credentials"（App Secret）
+// VERIFICATION_Token: VerificationToken、EncryptKey："Developer Console" -> "Event Subscriptions"（Verification Token）
+// ENCRYPT_Key: VerificationToken、EncryptKey："Developer Console" -> "Event Subscriptions"（Encrypt Key）
+// The configuration of "Custom App" is obtained through environment variables
+const appSettings = lark.core.getInternalAppSettingsByEnv()
+// The configuration of "Marketplace App" is obtained through environment variables
+const appSettings = lark.core.getISVAppSettingsByEnv()
+
+
+// Parameter Description:
+// AppID、AppSecret: "Developer Console" -> "Credentials"（App ID、App Secret）
+// VerificationToken、EncryptKey："Developer Console" -> "Event Subscriptions"（Verification Token、Encrypt Key）
+// The configuration of "Custom App"
+const appSettings = lark.core.newInternalAppSettings(appID, appSecret, verificationToken, encryptKey string)
+// The configuration of "Marketplace App"
+const appSettings = lark.core.newISVAppSettings(appID, appSecret, verificationToken, encryptKey string)
+
+```
+
+### How to build overall configuration(Config)
+
+- Visit Larksuite, Feishu or others
+- App settings
+- The implementation of logger is used to output the logs generated in the process of SDK processing, which is
+  convenient for troubleshooting.
+    - You can use the log implementation of the business system, see the sample
+      code: [packages/core/src/log/log.ts](packages/core/src/log/log.ts) ConsoleLogger
+- The implementation of store is used to save the access credentials (app/tenant_access_token), temporary voucher (
+  app_ticket）
+    - Redis is recommended. Please see the example code: [sample/config/redis_store.go](packages/sample/src/config/config.ts) RedisStore
+        - It can reduce the times of obtaining access credentials and prevent the frequency limit of calling access
+          credentials interface.
+        - "Marketplace App", accept open platform distributed `app_ticket` will be saved to the storage, so the
+          implementation of the storage interface (store) needs to support distributed storage.
+
+```javascript
+
+const lark = require("@larksuiteoapi/allcore");
+
+// it is recommended to use redis to implement the store interface, so as to reduce the times of accessing the accesstoken interface
+// Parameter Description:
+// domain：URL domain address, value range: constants.DomainLarkSuite / constants.FeiShu / Other domain addresses
+// appSettings：App setting
+// logger：[Log interface](core/log/log.go)
+// loggerLevel: log.LevelInfo/LevelInfo/LevelWarn/LevelError
+// store: [Store interface](core/store/store.go), used to store app_ticket/access_token
+const conf = lark.core.newConfig(domain: lark.core.Domain, appSettings: lark.core.AppSettings, logger: lark.core.Logger, loggerLevel: lark.core.LoggerLevel, store: lark.core.Store)
+
+```    
+
+### How to build a request(Request)
+
+- For more examples, see[packages/sample/src/api](packages/sample/src/api)（including: file upload and download）
+
+```javascript
+
+const lark = require("@larksuiteoapi/allcore");
+
+// Create request 
+// httpPath: (path after `open-apis/`) API path, for example: https://{domain}/open-apis/authen/v1/user_info, the httpPath: "authen/v1/user_info" 
+// httpMethod: GET/POST/PUT/BATCH/DELETE 
+// accessTokenType: What kind of token access the API uses, value range: lark.api.AccessTokenType.App/Tenant/User, for example: lark.api.AccessTokenType.Tenant 
+// input : The request body (may be formdata (for example: file upload)), if the request body is not needed (for example, some GET requests), pass: undefined 
+// optFns: extension function, some infrequently used parameter packages, as follows: 
+    // lark.api.setPathParams({"user_id":4}): Set the URL Path parameter (with: prefix) value, when httpPath="users/:user_id", the requested URL="https://{domain}/open-apis/users/4" 
+    // lark.api.setQueryParams({"age":4,"types":[1,2]}): Set the URL qeury, it will be appended to the url?age=4&types=1&types=2 
+    // lark.api.setTimeoutOfMs(1000), set the http request, timeout time in milliseconds 
+    // lark.api.setIsResponseStream(), set whether the response is a stream, such as downloading a file, at this time: the output value is of Buffer type
+    // lark.api.setIsNotDataField (), set up in response to whether or not `data` field service interface are all` data` field, there is no need to set 
+    // lark.api.setTenantKey("TenantKey"), to `` ISV application status, indication `tenant_access_token` access API, you need to set 
+    // lark.api.setUserAccessToken("UserAccessToken"), represents the use of` user_access_token` access API, you need to set 
+let req = lark.api.newRequest(httpPath: string, httpMethod: string, accessTokenType: AccessTokenType, input: any, ...optFns: OptFn[])
+
+```
+
+### How to send a request
+
+- For more use examples, please see: [packages/sample/src/api](packages/sample/src/api)（including: file upload and download）
+
+```javascript
+const lark = require("@larksuiteoapi/allcore");
+
+// Parameter Description:
+// conf：Overall configuration（Config）
+// req：Request（Request）
+// resp: http response body json
+// err：Send request happen error 
+async lark.api.sendRequest(conf: lark.core.config.Config, req: lark.api.request.Request)
+
+```
+
+### lark.core.Context common methods
+
+```javascript
+const lark = require("@larksuiteoapi/allcore");
+
+// In the handler of event subscription and message card callback, you can lark.core.Context Get config from
+const conf = lark.core.getConfigByCtx(ctx: lark.core.Context)
+
+```
+
+### Download File Tool
+
+- Download files via network request
+- For more use examples, please see: [packages/sample/src/tools/downFile.js](packages/sample/src/tools/downFile.js)
+
+```javascript
+const lark = require("@larksuiteoapi/allcore");
+
+// Get the file content
+// Parameter Description:
+// url：The HTTP address of the file
+// timeoutOfMs：Time the request timed out in milliseconds
+// Return value Description:
+// resp: http response body binary
+// err：Send request happen error
+async lark.api.downloadFile(url: string, timeoutOfMs: number)
+
+```
+
+## License
+
+---
+
+- MIT
     
-    
-
