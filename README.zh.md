@@ -20,7 +20,7 @@
 ## 术语解释
 - 飞书（FeiShu）：Lark在中国的称呼，主要为国内的企业提供服务，拥有独立的[域名地址](https://www.feishu.cn)。
 - LarkSuite：Lark在海外的称呼，主要为海外的企业提供服务，拥有独立的[域名地址](https://www.larksuite.com/) 。
-- 开发文档：开放平台的开放接口的参考，**开发者必看，可以使用搜索高效的查询文档**。[更多介绍说明](https://open.feishu.cn/document/) 。
+- 开发文档：开放平台的开放接口的参考，**开发者必看，可以使用搜索功能，高效的查询文档**。[更多介绍说明](https://open.feishu.cn/document/) 。
 - 开发者后台：开发者开发应用的管理后台，[更多介绍说明](https://open.feishu.cn/app/) 。
 - 企业自建应用：应用仅仅可在本企业内安装使用，[更多介绍说明](https://open.feishu.cn/document/uQjL04CN/ukzM04SOzQjL5MDN) 。
 - 应用商店应用：应用会在 [应用目录](https://app.feishu.cn/?lang=zh-CN) 展示，各个企业可以选择安装，[更多介绍说明](https://open.feishu.cn/document/uQjL04CN/ugTO5UjL4kTO14CO5kTN) 。
@@ -199,7 +199,6 @@ const conf = lark.core.newConfig(domain: lark.core.Domain, appSettings: lark.cor
 
 ### 如何构建请求（Request）
 
-- 有些老版接口，没有直接可以使用的SDK，可以使用原生模式，这时需要构建请求。
 - 更多使用示例，请看：[packages/sample/src/api](packages/sample/src/api)（含：文件的上传与下载）
 
 ```javascript
