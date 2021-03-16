@@ -2,8 +2,9 @@ const lark = require("@larksuiteoapi/allcore");
 const express = require('express');
 const bodyParser = require('body-parser');
 
-// for test
-const conf = lark.core.getTestISVConf("staging")
+const appSettings = lark.core.getInternalAppSettingsByEnv()
+// const conf = lark.core.newConfig("https://open.feishu.cn", appSettings, new lark.core.ConsoleLogger(), lark.core.LoggerLevel.INFO, new lark.core.DefaultStore())
+const conf = lark.core.newConfig(lark.core.Domain.FeiShu, appSettings, new lark.core.ConsoleLogger(), lark.core.LoggerLevel.INFO, new lark.core.DefaultStore())
 
 console.log(conf)
 
@@ -27,6 +28,7 @@ const app = express();
 
 app.use(bodyParser());
 
+// Start the httpserver, "Developer Console" -> "Event Subscriptions", setting Request URL：https://{domain}/webhook/event
 app.post('/webhook/event', (req, res) => {
     const request = new lark.core.Request()
     Object.entries(req.headers).forEach(([k, v]) => {
