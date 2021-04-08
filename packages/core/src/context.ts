@@ -1,4 +1,4 @@
-import {HTTPHeaderKeyRequestID, HTTPKeyStatusCode} from "./constants/constants";
+import {HTTPHeaderKey, HTTPHeaderKeyLogID, HTTPHeaderKeyRequestID, HTTPKeyStatusCode} from "./constants/constants";
 
 export class Context {
 
@@ -12,20 +12,21 @@ export class Context {
         return this.m.get(key)
     }
 
-    setRequestID(logID: string, requestID: string): void {
-        if (logID) {
-            this.set(HTTPHeaderKeyRequestID, logID)
-            return
-        }
-        this.set(HTTPHeaderKeyRequestID, requestID)
-    }
-
     set(key: string, value: any): void {
         this.m.set(key, value)
     }
 
+    getHeader(): { [key: string]: any } {
+        return this.m.get(HTTPHeaderKey)
+    }
+
     getRequestID(): string {
-        return this.get(HTTPHeaderKeyRequestID)
+        let header = this.getHeader()
+        let logID = header[HTTPHeaderKeyLogID.toLowerCase()]
+        if (logID) {
+            return logID
+        }
+        return header[HTTPHeaderKeyRequestID.toLowerCase()]
     }
 
     getHTTPStatusCode(): number {

@@ -11,7 +11,7 @@ lark.api.sendRequest(conf, lark.api.newRequest("message/v4/send", "POST", lark.a
         text: "test"
     }
 })).then(r => {
-    console.log("--------------------------")
+    console.log(r.getHeader())
     console.log(r.getRequestID())
     console.log(r.getHTTPStatusCode())
     console.log(r) // r = response.body

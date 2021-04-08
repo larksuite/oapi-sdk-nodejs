@@ -7,7 +7,7 @@ import {
     Context, DefaultContentType,
     getConfigByCtx,
     HTTPHeaderKeyRequestID, HTTPHeaderKeyLogID,
-    Response, throwTokenInvalidErr
+    Response, throwTokenInvalidErr, HTTPHeaderKey
 } from "@larksuiteoapi/core";
 import {HTTPEvent, V1, V2, Version1} from "../model/event"
 
@@ -129,9 +129,7 @@ const defaultHandlers = new Handlers(validateFunc, unmarshalFunc, handlerFunc, c
 
 export const handle = async (ctx: Context, httpEvent: HTTPEvent) => {
     try {
-        let logID = <string>httpEvent.request.headers[HTTPHeaderKeyLogID.toLowerCase()]
-        let requestID = <string>httpEvent.request.headers[HTTPHeaderKeyRequestID.toLowerCase()]
-        ctx.setRequestID(logID, requestID)
+        ctx.set(HTTPHeaderKey, httpEvent.request.headers)
         await defaultHandlers.validate(ctx, httpEvent)
         await defaultHandlers.unmarshal(ctx, httpEvent)
         await defaultHandlers.handler(ctx, httpEvent)

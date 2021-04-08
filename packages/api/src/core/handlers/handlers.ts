@@ -21,8 +21,8 @@ import {
     ContentTypeJson,
     Context,
     DefaultContentType,
-    getConfigByCtx, HTTPHeaderKeyRequestID, HTTPHeaderKeyLogID, HTTPKeyStatusCode,
-    SdkVersion
+    getConfigByCtx, HTTPKeyStatusCode,
+    SdkVersion, HTTPHeaderKey
 } from "@larksuiteoapi/core";
 import * as fs from "fs";
 import tempy from "tempy";
@@ -261,11 +261,13 @@ export class Handlers {
             req.httpRequestOpts.body = fs.createReadStream(bodySource.filePath)
         }
         req.httpResponse = await fetch(req.fullUrl(conf.getDomain()), req.httpRequestOpts)
-        req.response = new response.Response<T>(ctx)
-        let logID = req.httpResponse.headers.get(HTTPHeaderKeyLogID.toLowerCase())
-        let requestID = req.httpResponse.headers.get(HTTPHeaderKeyRequestID.toLowerCase())
-        ctx.setRequestID(logID, requestID)
+        let header: { [key: string]: any } = {}
+        req.httpResponse.headers.forEach((value, name) => {
+            header[name.toLowerCase()] = value
+        })
+        ctx.set(HTTPHeaderKey, header)
         ctx.set(HTTPKeyStatusCode, req.httpResponse.status)
+        req.response = new response.Response<T>(ctx)
         await this.validateResponse(ctx, req)
         await this.unmarshalResponse(ctx, req)
     }

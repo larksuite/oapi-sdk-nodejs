@@ -15,6 +15,7 @@ lark.api.sendRequest(conf, req).then(r => {
     fs.writeFileSync("./test.0.png", r.data)
     console.debug(r.getRequestID())
     console.debug(r.getHTTPStatusCode())
+    console.debug(r.getHeader())
 }).catch(e => {
     console.error(e)
 })

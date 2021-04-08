@@ -17,6 +17,7 @@ let req = lark.api.newRequest("image/v4/put", "POST", lark.api.AccessTokenType.T
 lark.api.sendRequest(conf, req).then(r => {
     console.debug(r.getRequestID())
     console.debug(r.getHTTPStatusCode())
+    console.debug(r.getHeader())
     console.log(r)
 }).catch(e => {
     console.error(e)

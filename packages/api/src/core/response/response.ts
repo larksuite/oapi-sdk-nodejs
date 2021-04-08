@@ -1,5 +1,5 @@
 import {Err} from "./error";
-import {Context, HTTPHeaderKeyRequestID, HTTPKeyStatusCode} from "@larksuiteoapi/core";
+import {Context} from "@larksuiteoapi/core";
 import util from "util";
 
 export class Response<T> {
@@ -15,12 +15,16 @@ export class Response<T> {
         this.msg = ""
     }
 
+    getHeader(): { [key: string]: any } {
+        return this.context.getHeader()
+    }
+
     getRequestID(): string {
-        return this.context.get(HTTPHeaderKeyRequestID)
+        return this.context.getRequestID()
     }
 
     getHTTPStatusCode(): number {
-        return this.context.get(HTTPKeyStatusCode)
+        return this.context.getHTTPStatusCode()
     }
 
     setBody(json: any) {
