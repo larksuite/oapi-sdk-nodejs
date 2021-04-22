@@ -1,6 +1,5 @@
 const lark = require("@larksuiteoapi/allcore");
 const express = require('express');
-const bodyParser = require('body-parser');
 
 const appSettings = lark.core.getInternalAppSettingsByEnv()
 // const conf = lark.core.newConfig("https://open.feishu.cn", appSettings, new lark.core.ConsoleLogger(), lark.core.LoggerLevel.INFO, new lark.core.DefaultStore())

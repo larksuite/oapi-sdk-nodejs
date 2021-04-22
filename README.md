@@ -220,9 +220,50 @@ const lark = require("@larksuiteoapi/allcore");
     // lark.api.setTimeoutOfMs(1000), set the http request, timeout time in milliseconds 
     // lark.api.setIsResponseStream(), set whether the response is a stream, such as downloading a file, at this time: the output value is of Buffer type
     // lark.api.setIsNotDataField (), set up in response to whether or not `data` field service interface are all` data` field, there is no need to set 
-    // lark.api.setTenantKey("TenantKey"), to `` ISV application status, indication `tenant_access_token` access API, you need to set 
+    // lark.api.setTenantKey("TenantKey"), to `ISV application` status, indication `tenant_access_token` access API, you need to set 
     // lark.api.setUserAccessToken("UserAccessToken"), represents the use of` user_access_token` access API, you need to set 
 let req = lark.api.newRequest(httpPath: string, httpMethod: string, accessTokenType: AccessTokenType, input: any, ...optFns: OptFn[])
+
+// Request method , SDK version requirements: 1.0.9 and above
+
+setPathParams(pathParams: { [key: string]: any }) // Set the URL Path parameter (with: prefix) value
+// Use example:
+req.setPathParams({"user_id":4}) // when httpPath="users/:user_id", the requested URL="https://{domain}/open-apis/users/4" 
+
+
+setQueryParams(queryParams: { [key: string]: any }) // Set the URL qeury
+// Use example:
+req.setQueryParams({"age":4,"types":[1,2]}) // it will be appended to the url?age=4&types=1&types=2 
+
+
+setTenantKey(tenantKey: string) // to `ISV application` status, indication `tenant_access_token` access API, you need to set 
+// Use example:
+req.setTenantKey("68daYsd") // Set TenantKey to "68daysd"
+
+
+setUserAccessToken(userAccessToken: string) // use of` user_access_token` access API, you need to set 
+// Use example:
+req.setUserAccessToken("u-7f1bcd13fc57d46bac21793a18e560") // Set the user access token to "u-7f1bcd13fc57d46bac21793a18e560"
+
+
+setTimeoutOfMs(timeoutOfMs: number) // set the http request, timeout time in milliseconds 
+// Use example:
+req.setTimeoutOfMs(5000) // Set the request timeout to 5000 Ms
+
+
+setIsResponseStream() // set whether the response is a stream, such as downloading a file, at this time: the output value is of Buffer type
+// Use example:
+req.setIsResponseStream() // set the response is a stream
+
+
+setResponseStream(responseStream: stream.Writable) // Set whether the response body is a stream. For example, when downloading a file, the response stream will be written to the responsestream
+// Use example:
+req.setResponseStream(fs.createWriteStream("./test.1.png")) // Write the response stream to the "./test.1.png" file
+
+
+setIsNotDataField() // Set whether the response body does not have a 'data' field, and the business interface has a 'data' field, so it does not need to be set
+// Use example:
+req.setIsNotDataField() // There is no 'data' field in the set response body
 
 ```
 

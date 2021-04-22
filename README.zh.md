@@ -211,15 +211,48 @@ const lark = require("@larksuiteoapi/allcore");
 // httpMethod: GET/POST/PUT/BATCH/DELETE
 // accessTokenType：API使用哪种token访问，取值范围：lark.api.AccessTokenType.App/Tenant/User，例如：lark.api.AccessTokenType.Tenant
 // input：请求体（可能是lark.api.FormData()（例如：文件上传））,如果不需要请求体（例如一些GET请求），则传：undefined
-// optFns：扩展函数，一些不常用的参数封装，如下：
-  // lark.api.setPathParams({"user_id":4})：设置URL Path参数（有:前缀）值，当httpPath="contact/v3/users/:user_id"时，请求的URL="https://{domain}/open-apis/contact/v3/users/4"
-  // lark.api.setQueryParams({"age":4,"types":[1,2]})：设置 URL qeury，会在url追加?age=4&types=1&types=2   
-  // lark.api.setTimeoutOfMs(1000)，设置http请求，超时时间毫秒值
-  // lark.api.setIsResponseStream()，设置响应的是否是流，例如下载文件，这时：output值是Buffer类型
-  // lark.api.setIsNotDataField(),设置响应的是否 没有`data`字段，业务接口都是有`data`字段，所以不需要设置
-  // lark.api.setTenantKey("TenantKey")，以`应用商店应用`身份，表示使用`tenant_access_token`访问API，需要设置
-  // lark.api.setUserAccessToken("UserAccessToken")，表示使用`user_access_token`访问API，需要设置
-const req = lark.api.newRequest(httpPath: string, httpMethod: string, accessTokenType: AccessTokenType, input: any, ...optFns: OptFn[] )
+const req = lark.api.newRequest(httpPath: string, httpMethod: string, accessTokenType: AccessTokenType, input: any)
+
+// Request 的方法，SDK版本要求：1.0.9及以上
+
+setPathParams(pathParams: { [key: string]: any }) // 设置URL Path参数（有:前缀）值
+// 使用示例:
+req.setPathParams({"user_id":4}) // 当 httpPath = "contact/v3/users/:user_id" 时，请求的URL="https://{domain}/open-apis/contact/v3/users/4"
+
+
+setQueryParams(queryParams: { [key: string]: any }) // 设置 URL qeury
+// 使用示例:
+req.setQueryParams({"age":4,"types":[1,2]}) // 会在url追加?age=4&types=1&types=2
+
+
+setTenantKey(tenantKey: string) // 以`应用商店应用`身份，表示使用`tenant_access_token`访问API，需要设置
+// 使用示例:
+req.setTenantKey("68daYsd") // 设置TenantKey 为 "68daYsd"
+
+
+setUserAccessToken(userAccessToken: string) // 表示使用`user_access_token`访问API，需要设置
+// 使用示例:
+req.setUserAccessToken("u-7f1bcd13fc57d46bac21793a18e560") // 设置 User access token 为 "u-7f1bcd13fc57d46bac21793a18e560"
+
+
+setTimeoutOfMs(timeoutOfMs: number) // 设置http请求，超时时间毫秒值
+// 使用示例:
+req.setTimeoutOfMs(5000) // 设置请求超时时间为 5000 毫秒
+
+
+setIsResponseStream() // 设置响应体的是否是流，例如下载文件，这时：output值是Buffer类型
+// 使用示例:
+req.setIsResponseStream() // 设置响应体是流
+
+
+setResponseStream(responseStream: stream.Writable) // 设置响应体的是否是流，例如下载文件，这时会把响应流写入 responseStream 
+// 使用示例:
+req.setResponseStream(fs.createWriteStream("./test.1.png")) // 把响应流写入"./test.1.png"文件中
+
+
+setIsNotDataField() // 设置响应体的是否 没有`data`字段，业务接口都是有`data`字段，所以不需要设置
+// 使用示例:
+req.setIsNotDataField() // 设置响应体没有`data`字段
 
 ```
 

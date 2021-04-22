@@ -43,7 +43,7 @@ export class Info<T> {
     output: T                               // response body data
     retryable: boolean = false
     timeout: number                         // http request time out
-    optFns: OptFn[]
+    optFns: OptFn[] = []
 
     withContext(ctx: Context): void {
         ctx.set(ctxKeyRequestInfo, this)
@@ -98,6 +98,7 @@ export const setIsResponseStream = function (): (opt: Opt) => void {
 
 export const setResponseStream = function (responseStream: stream.Writable): (opt: Opt) => void {
     return function (opt: Opt) {
+        opt.isResponseStream = true
         opt.responseStream = responseStream
     }
 }
@@ -128,6 +129,38 @@ export class Request<T> extends Info<T> {
 
     fullUrl(domain: Domain): string {
         return util.format("%s%s", domain, this.url())
+    }
+
+    setPathParams(pathParams: { [key: string]: any }) {
+        return this.optFns.push(setPathParams(pathParams))
+    }
+
+    setQueryParams(queryParams: { [key: string]: any }) {
+        return this.optFns.push(setQueryParams(queryParams))
+    }
+
+    setTimeoutOfMs(timeoutOfMs: number) {
+        return this.optFns.push(setTimeoutOfMs(timeoutOfMs))
+    }
+
+    setTenantKey(tenantKey: string) {
+        return this.optFns.push(setTenantKey(tenantKey))
+    }
+
+    setUserAccessToken(userAccessToken: string) {
+        return this.optFns.push(setUserAccessToken(userAccessToken))
+    }
+
+    setIsNotDataField() {
+        return this.optFns.push(setIsNotDataField())
+    }
+
+    setIsResponseStream() {
+        return this.optFns.push(setIsResponseStream())
+    }
+
+    setResponseStream(responseStream: stream.Writable) {
+        return this.optFns.push(setResponseStream(responseStream))
     }
 
     toString(): string {
