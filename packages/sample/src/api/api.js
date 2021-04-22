@@ -10,11 +10,11 @@ lark.api.sendRequest(conf, lark.api.newRequest("message/v4/send", "POST", lark.a
     content: {
         text: "test"
     }
-})).then(r => {
-    console.log(r.getHeader())
-    console.log(r.getRequestID())
-    console.log(r.getHTTPStatusCode())
-    console.log(r) // r = response.body
+})).then(resp => {
+    console.log(resp.getHeader())
+    console.log(resp.getRequestID())
+    console.log(resp.getHTTPStatusCode())
+    console.log(resp) // r = response.body
 }).catch(e => {
     console.log(e)
 })
@@ -257,11 +257,11 @@ lark.api.sendRequest(conf, lark.api.newRequest("message/v4/send", "POST", lark.a
             ]
         }
     }
-})).then(r => {
+})).then(resp => {
     console.log("--------------------------")
-    console.log(r.getRequestID())
-    console.log(r.getHTTPStatusCode())
-    console.log(r) // r = response.body
+    console.log(resp.getRequestID())
+    console.log(resp.getHTTPStatusCode())
+    console.log(resp) // r = response.body
 }).catch(e => {
     console.log(e)
 })

@@ -14,11 +14,11 @@ let formData = new lark.api.FormData()
 formData.addField("image_type", "message")
 formData.addFile("image", new lark.api.File().setContent(data).setType("image/jpeg"))
 let req = lark.api.newRequest("image/v4/put", "POST", lark.api.AccessTokenType.Tenant, formData)
-lark.api.sendRequest(conf, req).then(r => {
-    console.debug(r.getRequestID())
-    console.debug(r.getHTTPStatusCode())
-    console.debug(r.getHeader())
-    console.log(r)
+lark.api.sendRequest(conf, req).then(resp => {
+    console.debug(resp.getRequestID())
+    console.debug(resp.getHTTPStatusCode())
+    console.debug(resp.getHeader())
+    console.log(resp)
 }).catch(e => {
     console.error(e)
 })

@@ -213,16 +213,8 @@ const lark = require("@larksuiteoapi/allcore");
 // httpPath: (path after `open-apis/`) API path, for example: https://{domain}/open-apis/authen/v1/user_info, the httpPath: "authen/v1/user_info" 
 // httpMethod: GET/POST/PUT/BATCH/DELETE 
 // accessTokenType: What kind of token access the API uses, value range: lark.api.AccessTokenType.App/Tenant/User, for example: lark.api.AccessTokenType.Tenant 
-// input : The request body (may be formdata (for example: file upload)), if the request body is not needed (for example, some GET requests), pass: undefined 
-// optFns: extension function, some infrequently used parameter packages, as follows: 
-    // lark.api.setPathParams({"user_id":4}): Set the URL Path parameter (with: prefix) value, when httpPath="users/:user_id", the requested URL="https://{domain}/open-apis/users/4" 
-    // lark.api.setQueryParams({"age":4,"types":[1,2]}): Set the URL qeury, it will be appended to the url?age=4&types=1&types=2 
-    // lark.api.setTimeoutOfMs(1000), set the http request, timeout time in milliseconds 
-    // lark.api.setIsResponseStream(), set whether the response is a stream, such as downloading a file, at this time: the output value is of Buffer type
-    // lark.api.setIsNotDataField (), set up in response to whether or not `data` field service interface are all` data` field, there is no need to set 
-    // lark.api.setTenantKey("TenantKey"), to `ISV application` status, indication `tenant_access_token` access API, you need to set 
-    // lark.api.setUserAccessToken("UserAccessToken"), represents the use of` user_access_token` access API, you need to set 
-let req = lark.api.newRequest(httpPath: string, httpMethod: string, accessTokenType: AccessTokenType, input: any, ...optFns: OptFn[])
+// input : The request body (may be formdata (for example: file upload)), if the request body is not needed (for example, some GET requests), pass: undefined
+let req = lark.api.newRequest(httpPath: string, httpMethod: string, accessTokenType: AccessTokenType, input: any)
 
 // Request method , SDK version requirements: 1.0.9 and above
 
