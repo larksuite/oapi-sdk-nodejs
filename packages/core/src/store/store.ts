@@ -11,7 +11,7 @@ class V {
 
     constructor(value: string, expire: number) {
         this.value = value
-        this.expireTime = new Date(new Date().getTime() + expire)
+        this.expireTime = new Date(new Date().getTime() + expire * 1000)
     }
 }
 

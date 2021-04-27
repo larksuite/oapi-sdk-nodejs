@@ -96,7 +96,6 @@ const complementFunc = async (ctx: Context, httpEvent: HTTPEvent) => {
     let conf = getConfigByCtx(ctx)
     if (httpEvent.err) {
         if (httpEvent.err instanceof NotFoundHandlerErr) {
-            conf.getLogger().info(httpEvent.err)
             writeHTTPResponse(httpEvent, 200, util.format(responseFormat, httpEvent.err))
             return
         }
