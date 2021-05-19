@@ -14,6 +14,11 @@
 - Larksuite development interface SDK, convenient call server API and subscribe server events, such as: Message & group,
   address book, calendar, docs and others can visit [larksuite open platform document](https://open.larksuite.cn/document) ,Take a look at [REFERENCE].
 
+## Problem feedback
+
+If you encounter any problems during usage, please let us know by submitting  [Github Issues](https://github.com/larksuite/oapi-sdk-nodejs/issues). We will deal with these Issues and get back to you as soon as possible.
+
+
 ## installation
 
 ```shell script
