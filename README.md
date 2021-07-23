@@ -22,7 +22,7 @@ If you encounter any problems during usage, please let us know by submitting  [G
 ## installation
 
 ```shell script
-  npm i @larksuiteoapi/allcore
+  npm i @larksuiteoapi/allcore@1.0.11
 ```
 
 ## Explanation of terms
@@ -49,23 +49,33 @@ If you encounter any problems during usage, please let us know by submitting  [G
 const lark = require("@larksuiteoapi/allcore");
 
 // Configuration of custom app, parameter description:
-// AppID、AppSecret: "Developer Console" -> "Credentials"（App ID、App Secret）
-// VerificationToken、EncryptKey："Developer Console" -> "Event Subscriptions"（Verification Token、Encrypt Key）
-const appSettings = lark.core.newInternalAppSettings("AppID", "AppSecret", "VerificationToken", "EncryptKey")
+// appID、appSecret: "Developer Console" -> "Credentials"（App ID、App Secret）
+// verificationToken、encryptKey："Developer Console" -> "Event Subscriptions"（Verification Token、Encrypt Key）
+// helpDeskID、helpDeskToken, Help Desk token：https://open.feishu.cn/document/ukTMukTMukTM/ugDOyYjL4gjM24CO4IjN
+const appSettings = lark.newInternalAppSettings({
+    appID: "App ID",
+    appSecret: "App Secret",
+    encryptKey: "Encrypt Key", // Not required. Required when subscribing to events
+    verificationToken: "Verification Token", // Not required, required to subscribe to event and message cards
+    helpDeskID: "HelpDesk ID", // Not required, required when using the help Desk API
+    helpDeskToken: "HelpDesk Token", // Not required, required when using the help Desk API
+})
 
-// Currently, you are visiting larksuite, which uses default storage and default log (debug level). More optional configurations are as follows: config.NewConfig ()
-const conf = lark.core.newConfig(lark.core.Domain.LarkSuite, appSettings, new lark.core.ConsoleLogger(), lark.core.LoggerLevel.INFO, new lark.core.DefaultStore())
+// Currently, you are visiting larksuite, which uses default storage and default log (error level). For more optional configurations, see readme.md -> How to Build an overall Configuration (Config).
+const conf = lark.newConfig(lark.Domain.FeiShu, appSettings, {
+    loggerLevel: lark.LoggerLevel.ERROR,
+})
 
 // The content of the sent message
 const body = {
-    "open_id": "user open id",
-    "msg_type": "text",
-    "content": {
-        "text": "test send message",
+    open_id: "user open id",
+    msg_type: "text",
+    content: {
+        text: "test send message",
     },
 }
 // Build request
-const req = lark.api.newRequest("message/v4/send", "POST", lark.api.AccessTokenType.Tenant, body)
+const req = lark.api.newRequest("/open-apis/message/v4/send", "POST", lark.api.AccessTokenType.Tenant, body)
 // Send request 
 lark.api.sendRequest(conf, req).then(r => {
     // Print the requestId of the request
@@ -90,13 +100,21 @@ lark.api.sendRequest(conf, req).then(r => {
 ```javascript
 const lark = require("@larksuiteoapi/allcore");
 
-// Configuration of "Custom App", parameter description:
-// AppID、AppSecret: "Developer Console" -> "Credentials"（App ID、App Secret）
-// VerificationToken、EncryptKey："Developer Console" -> "Event Subscriptions"（Verification Token、Encrypt Key）
-const appSettings = lark.core.newInternalAppSettings("AppID", "AppSecret", "VerificationToken", "EncryptKey")
+// Configuration of custom app, parameter description:
+// appID、appSecret: "Developer Console" -> "Credentials"（App ID、App Secret）
+// verificationToken、encryptKey："Developer Console" -> "Event Subscriptions"（Verification Token、Encrypt Key）
+// helpDeskID、helpDeskToken, Help Desk token：https://open.feishu.cn/document/ukTMukTMukTM/ugDOyYjL4gjM24CO4IjN
+const appSettings = lark.newInternalAppSettings({
+    appID: "App ID",
+    appSecret: "App Secret",
+    encryptKey: "Encrypt Key",
+    verificationToken: "Verification Token",
+})
 
-// Currently, you are visiting larksuite, which uses default storage and default log (debug level). More optional configurations are as follows: config.NewConfig ()
-const conf = lark.core.newConfig(lark.core.Domain.FeiShu, appSettings, new lark.core.ConsoleLogger(), lark.core.LoggerLevel.INFO, new lark.core.DefaultStore())
+// Currently, you are visiting larksuite, which uses default storage and default log (error level). For more optional configurations, see readme.md -> How to Build an overall Configuration (Config).
+const conf = lark.newConfig(lark.Domain.FeiShu, appSettings, {
+    loggerLevel: lark.LoggerLevel.ERROR,
+})
 
 // Set the application event handler to be enabled for the first time
 lark.event.setTypeHandler(conf, "app_open", (ctx, event) => {
@@ -121,15 +139,21 @@ lark.event.startServer(conf, 8089)
 #### Example of using `Custom App` to handling message card callback.
 
 ```javascript
-const lark = require("@larksuiteoapi/allcore");
+// Configuration of custom app, parameter description:
+// appID、appSecret: "Developer Console" -> "Credentials"（App ID、App Secret）
+// verificationToken、encryptKey："Developer Console" -> "Event Subscriptions"（Verification Token、Encrypt Key）
+// helpDeskID、helpDeskToken, Help Desk token：https://open.feishu.cn/document/ukTMukTMukTM/ugDOyYjL4gjM24CO4IjN
+const appSettings = lark.newInternalAppSettings({
+    appID: "App ID",
+    appSecret: "App Secret",
+    encryptKey: "Encrypt Key", // Not required. Required when subscribing to events
+    verificationToken: "Verification Token",
+})
 
-// Configuration of "Custom App", parameter description:
-// AppID、AppSecret: "Developer Console" -> "Credentials"（App ID、App Secret）
-// VerificationToken、EncryptKey："Developer Console" -> "Event Subscriptions"（Verification Token、Encrypt Key）
-const appSettings = lark.core.newInternalAppSettings("AppID", "AppSecret", "VerificationToken", "EncryptKey")
-
-// Currently, you are visiting larksuite, which uses default storage and default log (debug level). More optional configurations are as follows: config.NewConfig ()
-const conf = lark.core.newConfig(lark.core.Domain.FeiShu, appSettings, new lark.core.ConsoleLogger(), lark.core.LoggerLevel.INFO, new lark.core.DefaultStore())
+// Currently, you are visiting larksuite, which uses default storage and default log (error level). For more optional configurations, see readme.md -> How to Build an overall Configuration (Config).
+const conf = lark.newConfig(lark.Domain.FeiShu, appSettings, {
+    loggerLevel: lark.LoggerLevel.ERROR,
+})
 
 // Set the handler of the message card
 // Return value: can be "", JSON string of new message card
@@ -145,11 +169,7 @@ lark.card.setHandler(conf, (ctx, card) => {
 lark.event.startServer(conf, 8089)
 ```
 
-## Advanced use
-
----
-
-### How to build app settings(AppSettings)
+## How to build app settings(AppSettings)
 
 ```javascript
 const lark = require("@larksuiteoapi/allcore");
@@ -159,23 +179,40 @@ const lark = require("@larksuiteoapi/allcore");
 // APP_Secret: "Developer Console" -> "Credentials"（App Secret）
 // VERIFICATION_Token: VerificationToken、EncryptKey："Developer Console" -> "Event Subscriptions"（Verification Token）
 // ENCRYPT_Key: VerificationToken、EncryptKey："Developer Console" -> "Event Subscriptions"（Encrypt Key）
+// HELP_DESK_ID: Service desk setup center -> ID
+// HELP_DESK_TOKEN: Service desk setup center -> 令牌
 // The configuration of "Custom App" is obtained through environment variables
-const appSettings = lark.core.getInternalAppSettingsByEnv()
+const appSettings = lark.getInternalAppSettingsByEnv()
 // The configuration of "Marketplace App" is obtained through environment variables
-const appSettings = lark.core.getISVAppSettingsByEnv()
+const appSettings = lark.getISVAppSettingsByEnv()
 
 
-// Parameter Description:
-// AppID、AppSecret: "Developer Console" -> "Credentials"（App ID、App Secret）
-// VerificationToken、EncryptKey："Developer Console" -> "Event Subscriptions"（Verification Token、Encrypt Key）
-// The configuration of "Custom App"
-const appSettings = lark.core.newInternalAppSettings(appID, appSecret, verificationToken, encryptKey string)
+// Parameter description:
+// appID、appSecret: "Developer Console" -> "Credentials"（App ID、App Secret）
+// verificationToken、encryptKey："Developer Console" -> "Event Subscriptions"（Verification Token、Encrypt Key）
+// helpDeskID、helpDeskToken, Help Desk token：https://open.feishu.cn/document/ukTMukTMukTM/ugDOyYjL4gjM24CO4IjN
+// The Configuration of custom app, parameter description:
+const appSettings = lark.newInternalAppSettings({
+    appID: "App ID",
+    appSecret: "App Secret",
+    encryptKey: "Encrypt Key", // Not required. Required when subscribing to events
+    verificationToken: "Verification Token", // Not required, required to subscribe to event and message cards
+    helpDeskID: "HelpDesk ID", // Not required, required when using the help Desk API
+    helpDeskToken: "HelpDesk Token", // Not required, required when using the help Desk API
+})
 // The configuration of "Marketplace App"
-const appSettings = lark.core.newISVAppSettings(appID, appSecret, verificationToken, encryptKey string)
+const appSettings = lark.newISVAppSettings({
+    appID: "App ID",
+    appSecret: "App Secret",
+    encryptKey: "Encrypt Key", // Not required. Required when subscribing to events
+    verificationToken: "Verification Token", // Not required, required to subscribe to event and message cards
+    helpDeskID: "HelpDesk ID", // Not required, required when using the help Desk API
+    helpDeskToken: "HelpDesk Token", // Not required, required when using the help Desk API
+})
 
 ```
 
-### How to build overall configuration(Config)
+## How to build overall configuration(Config)
 
 - Visit Larksuite, Feishu or others
 - App settings
@@ -195,18 +232,25 @@ const appSettings = lark.core.newISVAppSettings(appID, appSecret, verificationTo
 
 const lark = require("@larksuiteoapi/allcore");
 
-// it is recommended to use redis to implement the store interface, so as to reduce the times of accessing the accesstoken interface
-// Parameter Description:
-// domain：URL domain address, value range: constants.DomainLarkSuite / constants.FeiShu / Other domain addresses
-// appSettings：App setting
-// logger：[Log interface](core/log/log.go)
-// loggerLevel: log.LevelInfo/LevelInfo/LevelWarn/LevelError
-// store: [Store interface](core/store/store.go), used to store app_ticket/access_token
-const conf = lark.core.newConfig(domain: lark.core.Domain, appSettings: lark.core.AppSettings, logger: lark.core.Logger, loggerLevel: lark.core.LoggerLevel, store: lark.core.Store)
+// It is recommended to use Redis to implement the storage interface (Store) to reduce the number of accesses to the AccessToken interface
+// Parameter description:
+// domain: URL Domain address. Value range: lark.Domain.FeiShu / lark.Domain.LarkSuite / Other URL domain name address
+// appSettings: application configuration
+// opts: configuration options
+    // opts.logger: [log interface](core/log/log.go), default: lark.ConsoleLogger
+    // opts.loggerlevel: log level. Default: ERROR level （lark.LoggerLevel.ERROR）
+    // opts.store: [storage port](core/store/store.go), used to store app_ticket/app_access_token/tenant_access_token. Default: lark.DefaultStore
+lark.newConfig(domain: Domain, appSettings: AppSettings, opts: ConfigOpts): Config
 
+// Use example:
+const conf = lark.newConfig(lark.Domain.FeiShu, appSettings, {
+    loggerLevel: lark.LoggerLevel.ERROR,
+    logger: new lark.ConsoleLogger(),
+    store: new lark.DefaultStore(),
+})
 ```    
 
-### How to build a request(Request)
+## How to build a request(Request)
 
 - For more examples, see[packages/sample/src/api](packages/sample/src/api)（including: file upload and download）
 
@@ -258,13 +302,18 @@ setResponseStream(responseStream: stream.Writable) // Set whether the response b
 req.setResponseStream(fs.createWriteStream("./test.1.png")) // Write the response stream to the "./test.1.png" file
 
 
+setNeedHelpDeskAuth() // If it is a HelpDesk API, you need to set the HelpDesk token
+// Use example:
+req.setNeedHelpDeskAuth() // Sets whether the request requires a HelpDesk token
+
+
 setIsNotDataField() // Set whether the response body does not have a 'data' field, and the business interface has a 'data' field, so it does not need to be set
 // Use example:
 req.setIsNotDataField() // There is no 'data' field in the set response body
 
 ```
 
-### How to send a request
+## How to send a request
 - Since the SDK has encapsulated the app_access_token、tenant_access_token So when calling the business API, you don't need to get the app_access_token、tenant_access_token. If the business interface needs to use user_access_token, which needs to be set（lark.api.setUserAccessToken("UserAccessToken")), Please refer to README.md -> How to build a request(Request)
 - For more use examples, please see: [packages/sample/src/api](packages/sample/src/api)（including: file upload and download）
 
@@ -276,11 +325,11 @@ const lark = require("@larksuiteoapi/allcore");
 // req：Request（Request）
 // resp: http response body json
 // err：Send request happen error 
-async lark.api.sendRequest(conf: lark.core.config.Config, req: lark.api.request.Request)
+async lark.api.sendRequest(conf: lark.core.Config, req: lark.api.Request)
 
 ```
 
-### lark.core.Context common methods
+## lark.core.Context common methods
 
 ```javascript
 const lark = require("@larksuiteoapi/allcore");
@@ -290,7 +339,7 @@ const conf = lark.core.getConfigByCtx(ctx: lark.core.Context)
 
 ```
 
-### Download File Tool
+## Download File Tool
 
 - Download files via network request
 - For more use examples, please see: [packages/sample/src/tools/downFile.js](packages/sample/src/tools/downFile.js)

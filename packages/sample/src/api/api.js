@@ -1,16 +1,18 @@
 const lark = require("@larksuiteoapi/allcore");
 
-const appSettings = lark.core.getInternalAppSettingsByEnv()
-// const conf = lark.core.newConfig("https://open.feishu.cn", appSettings, new lark.core.ConsoleLogger(), lark.core.LoggerLevel.INFO, new lark.core.DefaultStore())
-const conf = lark.core.newConfig(lark.core.Domain.FeiShu, appSettings, new lark.core.ConsoleLogger(), lark.core.LoggerLevel.INFO, new lark.core.DefaultStore())
+const appSettings = lark.getInternalAppSettingsByEnv()
 
-lark.api.sendRequest(conf, lark.api.newRequest("message/v4/send", "POST", lark.api.AccessTokenType.Tenant, {
-    "user_id": "77bbc392",
+const conf = lark.newConfig(lark.Domain.FeiShu, appSettings, {})
+
+let req = lark.api.newRequest("/open-apis/message/v4/send", "POST", lark.api.AccessTokenType.Tenant, {
+    user_id: "77bbc392",
     msg_type: "text",
     content: {
         text: "test"
     }
-})).then(resp => {
+})
+req.setTimeoutOfMs(6000)
+lark.api.sendRequest(conf, req).then(resp => {
     console.log(resp.getHeader())
     console.log(resp.getRequestID())
     console.log(resp.getHTTPStatusCode())
@@ -20,8 +22,8 @@ lark.api.sendRequest(conf, lark.api.newRequest("message/v4/send", "POST", lark.a
 })
 
 // send card message
-lark.api.sendRequest(conf, lark.api.newRequest("message/v4/send", "POST", lark.api.AccessTokenType.Tenant, {
-    "user_id": "77bbc392",
+lark.api.sendRequest(conf, lark.api.newRequest("/open-apis/message/v4/send", "POST", lark.api.AccessTokenType.Tenant, {
+    user_id: "77bbc392",
     msg_type: "interactive",
     card: {
         "config": {

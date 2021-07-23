@@ -4,6 +4,11 @@ import {Err} from "../response/error";
 export const throwAccessTokenTypeIsInValidErr = () => {
     throw new Error("access token type invalid")
 }
+
+export const throwHelpDeskAuthorizationIsEmptyErr = () =>{
+    throw new Error("help desk API, please set the helpdesk information of AppSettings")
+}
+
 export const throwTenantKeyIsEmptyErr = () => {
     throw new Error("tenant key is empty")
 }

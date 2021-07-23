@@ -1,9 +1,10 @@
 const lark = require("@larksuiteoapi/allcore");
 const fs = require("fs")
 
-const appSettings = lark.core.getInternalAppSettingsByEnv()
-// const conf = lark.core.newConfig("https://open.feishu.cn", appSettings, new lark.core.ConsoleLogger(), lark.core.LoggerLevel.INFO, new lark.core.DefaultStore())
-const conf = lark.core.newConfig(lark.core.Domain.FeiShu, appSettings, new lark.core.ConsoleLogger(), lark.core.LoggerLevel.INFO, new lark.core.DefaultStore())
+const appSettings = lark.getInternalAppSettingsByEnv()
+const conf = lark.newConfig(lark.Domain.FeiShu, appSettings, {
+    loggerLevel: lark.LoggerLevel.ERROR,
+})
 
 // upload image
 // use stream

@@ -1,6 +1,6 @@
 {
   "name": "@larksuiteoapi/api",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "larksuite open api sdk",
   "keywords": [
     "feishu",
@@ -33,7 +33,7 @@
     "build:clean": "rm -rf ./dist"
   },
   "dependencies": {
-    "@larksuiteoapi/core": "1.0.10",
+    "@larksuiteoapi/core": "1.0.11",
     "form-data": "^3.0.0",
     "node-fetch": "^2.6.0",
     "tempy": "^0.7.1"

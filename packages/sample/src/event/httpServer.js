@@ -1,8 +1,9 @@
 const lark = require("@larksuiteoapi/allcore");
 
-const appSettings = lark.core.getInternalAppSettingsByEnv()
-// const conf = lark.core.newConfig("https://open.feishu.cn", appSettings, new lark.core.ConsoleLogger(), lark.core.LoggerLevel.INFO, new lark.core.DefaultStore())
-const conf = lark.core.newConfig(lark.core.Domain.FeiShu, appSettings, new lark.core.ConsoleLogger(), lark.core.LoggerLevel.INFO, new lark.core.DefaultStore())
+const appSettings = lark.getInternalAppSettingsByEnv()
+const conf = lark.newConfig(lark.Domain.FeiShu, appSettings, {
+    loggerLevel: lark.LoggerLevel.ERROR,
+})
 
 lark.event.setTypeHandler(conf, "user_update", (ctx, event) => {
     let conf = lark.core.getConfigByCtx(ctx);

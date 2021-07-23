@@ -26,9 +26,11 @@ export class Opt {
     timeoutOfMs: number
     isResponseStream: boolean
     responseStream: any
+    needHelpDeskAuth: boolean
 }
 
 export class Info<T> {
+    domain: string                          // request http domain
     httpPath: string                         // request http path
     httpMethod: string                       // request http method
     queryParams: string                       // request query
@@ -42,6 +44,7 @@ export class Info<T> {
     isResponseStreamReal: boolean = false
     output: T                               // response body data
     retryable: boolean = false
+    needHelpDeskAuth: boolean = false       // need helpdesk token
     timeout: number                         // http request time out
     optFns: OptFn[] = []
 
@@ -96,6 +99,12 @@ export const setIsResponseStream = function (): (opt: Opt) => void {
     }
 }
 
+export const setNeedHelpDeskAuth = function (): (opt: Opt) => void {
+    return function (opt: Opt) {
+        opt.needHelpDeskAuth = true
+    }
+}
+
 export const setResponseStream = function (responseStream: stream.Writable): (opt: Opt) => void {
     return function (opt: Opt) {
         opt.isResponseStream = true
@@ -120,7 +129,14 @@ export class Request<T> extends Info<T> {
     response: Response<T>
 
     url(): string {
-        let path = util.format("/%s/%s", OAPIRootPath, this.httpPath)
+        let path = this.httpPath
+        if (this.httpPath.indexOf("http") != 0) {
+            if (this.httpPath.indexOf("/open-apis") == 0) {
+                path = util.format("%s%s", this.domain, this.httpPath)
+            } else {
+                path = util.format("%s/%s/%s", this.domain, OAPIRootPath, this.httpPath)
+            }
+        }
         if (this.queryParams) {
             path = util.format("%s?%s", path, this.queryParams)
         }
@@ -163,11 +179,16 @@ export class Request<T> extends Info<T> {
         return this.optFns.push(setResponseStream(responseStream))
     }
 
+    setNeedHelpDeskAuth() {
+        return this.optFns.push(setNeedHelpDeskAuth())
+    }
+
     toString(): string {
         return util.format("%s %s %s", this.httpMethod, this.url(), this.accessTokenType)
     }
 
-    init() {
+    init(domain: string) {
+        this.domain = domain
         let opt = new Opt()
         for (let v of this.optFns) {
             v(opt)
@@ -191,6 +212,7 @@ export class Request<T> extends Info<T> {
                 this.userAccessToken = opt.userAccessToken || ""
             }
         }
+        this.needHelpDeskAuth = opt.needHelpDeskAuth
         this.timeout = opt.timeoutOfMs || 30000
         if (opt.queryParams) {
             this.queryParams = querystring.stringify(opt.queryParams)

@@ -1,11 +1,11 @@
 import * as lark from "@larksuiteoapi/allcore"
-// for online, use redis store access token
-import {getConfig} from "../config/config";
+import {RedisStore} from "../config/config";
 
-const conf = getConfig(lark.core.Domain.FeiShu, lark.core.getInternalAppSettingsByEnv(), lark.core.LoggerLevel.DEBUG)
-
-// for test
-// const conf = lark.core.getTestInternalConf("online")
+const appSettings = lark.getInternalAppSettingsByEnv()
+const conf = lark.newConfig(lark.Domain.FeiShu, appSettings, {
+    loggerLevel: lark.LoggerLevel.ERROR,
+    store: new RedisStore()
+})
 
 lark.api.sendRequest(conf, lark.api.newRequest("message/v4/send", "POST", lark.api.AccessTokenType.Tenant, {
     "user_id": "77bbc392",

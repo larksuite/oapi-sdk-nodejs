@@ -5,7 +5,7 @@ import * as response from "../response/response"
 
 import {
     AppTicketIsEmptyErr,
-    throwAccessTokenTypeIsInValidErr,
+    throwAccessTokenTypeIsInValidErr, throwHelpDeskAuthorizationIsEmptyErr,
     throwTenantKeyIsEmptyErr,
     throwUserAccessTokenKeyIsEmptyErr
 } from "../errors/errors";
@@ -37,8 +37,9 @@ defaultHTTPRequestHeader.set("User-Agent", util.format("oapi-sdk-nodejs/%s", Sdk
 
 type handler = <T>(ctx: Context, req: request.Request<T>) => Promise<void>
 
-const initFunc = async <T>(_: Context, req: request.Request<T>) => {
-    req.init()
+const initFunc = async <T>(ctx: Context, req: request.Request<T>) => {
+    let conf = getConfigByCtx(ctx)
+    req.init(conf.getDomain())
 }
 
 const validateFunc = async <T>(ctx: Context, req: request.Request<T>) => {
@@ -136,11 +137,21 @@ const buildFunc = async <T>(ctx: Context, req: request.Request<T>) => {
 const signFunc = async <T>(ctx: Context, req: request.Request<T>) => {
     switch (req.accessTokenType) {
         case request.AccessTokenType.App:
-            return await setAppAccessToken(ctx, req.httpRequestOpts.headers)
+            await setAppAccessToken(ctx, req.httpRequestOpts.headers)
+            break
         case request.AccessTokenType.Tenant:
-            return await setTenantAccessToken(ctx, req.httpRequestOpts.headers)
+            await setTenantAccessToken(ctx, req.httpRequestOpts.headers)
+            break
         case request.AccessTokenType.User:
-            return await setUserAccessToken(ctx, req.httpRequestOpts.headers)
+            await setUserAccessToken(ctx, req.httpRequestOpts.headers)
+            break
+    }
+    if (req.needHelpDeskAuth) {
+        let helpDeskAuthorization = getConfigByCtx(ctx).getHelpDeskAuthorization()
+        if (!helpDeskAuthorization) {
+            throwHelpDeskAuthorizationIsEmptyErr()
+        }
+        req.httpRequestOpts.headers["X-Lark-Helpdesk-Authorization"] = helpDeskAuthorization
     }
 }
 
@@ -159,7 +170,7 @@ const validateResponseFunc = async <T>(_: Context, req: request.Request<T>) => {
         return
     }
     if (!contentType || contentType.indexOf(ContentTypeJson) === -1) {
-        throw newErrorOfInvalidResp(util.format("content-type: %s, is not: %s, if is stream, please `OapiApi.setIsResponseStream()`, body:%s", contentType, ContentTypeJson, resp.body.toString()))
+        throw newErrorOfInvalidResp(util.format("content-type: %s, is not: %s, if is stream, please `request.setIsResponseStream()`, body:%s", contentType, ContentTypeJson, resp.body.toString()))
     }
 }
 
@@ -253,14 +264,13 @@ export class Handlers {
     }
 
     private _send = async <T>(ctx: Context, req: request.Request<T>) => {
-        let conf = getConfigByCtx(ctx)
         await this.build(ctx, req)
         await this.sign(ctx, req)
         let bodySource = req.httpRequestOpts.bodySource
         if (bodySource && bodySource.isStream) {
             req.httpRequestOpts.body = fs.createReadStream(bodySource.filePath)
         }
-        req.httpResponse = await fetch(req.fullUrl(conf.getDomain()), req.httpRequestOpts)
+        req.httpResponse = await fetch(req.url(), req.httpRequestOpts)
         let header: { [key: string]: any } = {}
         req.httpResponse.headers.forEach((value, name) => {
             header[name.toLowerCase()] = value

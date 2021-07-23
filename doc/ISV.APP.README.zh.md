@@ -17,12 +17,23 @@
 const lark = require("@larksuiteoapi/allcore");
 
 // 应用商店应用的配置
-// AppID、AppSecret: "开发者后台" -> "凭证与基础信息" -> 应用凭证（App ID、App Secret）
-// VerificationToken、EncryptKey："开发者后台" -> "事件订阅" -> 事件订阅（Verification Token、Encrypt Key）。
-const appSettings = lark.core.newISVAppSettings("AppID", "AppSecret", "VerificationToken", "EncryptKey")
+// appID、appSecret: "开发者后台" -> "凭证与基础信息" -> 应用凭证（App ID、App Secret）
+// verificationToken、encryptKey："开发者后台" -> "事件订阅" -> 事件订阅（Verification Token、Encrypt Key）。
+// helpDeskID、helpDeskToken, 服务台 token：https://open.feishu.cn/document/ukTMukTMukTM/ugDOyYjL4gjM24CO4IjN
+const appSettings = lark.newISVAppSettings({
+    appID: "App ID",
+    appSecret: "App Secret",
+    encryptKey: "Encrypt Key",
+    verificationToken: "Verification Token",
+    helpDeskID: "HelpDesk ID", // 非必需，使用服务台API时必需
+    helpDeskToken: "HelpDesk Token", // 非必需，使用服务台API时必需
+})
 
-// lark.core.newConfig()的使用，请看：README.zh.md->高级使用->如何构建整体配置（Config）
-const conf = lark.core.newConfig(domain: Domain, appSettings: AppSettings, logger: Logger, loggerLevel: LoggerLevel, store: Store)
+// 当前访问的是飞书，使用默认存储、默认日志（Error级别），更多可选配置，请看：README.zh.md -> 如何构建整体配置（Config）。
+const conf = lark.newConfig(lark.Domain.FeiShu, appSettings, {
+    loggerLevel: lark.LoggerLevel.ERROR,
+    store: 需要使用分布式缓存实现, // 例如: packages/sample/src/config/config.ts 的 RedisStore
+})
 
 // 启动httpServer，"开发者后台" -> "事件订阅" 请求网址 URL：https://domain
 // startup event http server, port: 8089
@@ -36,23 +47,34 @@ lark.event.startServer(conf, 8089)
 const lark = require("@larksuiteoapi/allcore");
 
 // 应用商店应用的配置
-// AppID、AppSecret: "开发者后台" -> "凭证与基础信息" -> 应用凭证（App ID、App Secret）
-// VerificationToken、EncryptKey："开发者后台" -> "事件订阅" -> 事件订阅（Verification Token、Encrypt Key）。
-const appSettings = lark.core.newISVAppSettings("AppID", "AppSecret", "VerificationToken", "EncryptKey")
+// appID、appSecret: "开发者后台" -> "凭证与基础信息" -> 应用凭证（App ID、App Secret）
+// verificationToken、encryptKey："开发者后台" -> "事件订阅" -> 事件订阅（Verification Token、Encrypt Key）。
+// helpDeskID、helpDeskToken, 服务台 token：https://open.feishu.cn/document/ukTMukTMukTM/ugDOyYjL4gjM24CO4IjN
+const appSettings = lark.newISVAppSettings({
+    appID: "App ID",
+    appSecret: "App Secret",
+    encryptKey: "Encrypt Key",
+    verificationToken: "Verification Token",
+    helpDeskID: "HelpDesk ID", // 非必需，使用服务台API时必需
+    helpDeskToken: "HelpDesk Token", // 非必需，使用服务台API时必需
+})
 
-// lark.core.newConfig()的使用，请看：README.zh.md->高级使用->如何构建整体配置（Config）
-const conf = lark.core.newConfig(domain: Domain, appSettings: AppSettings, logger: Logger, loggerLevel: LoggerLevel, store: Store)
+// 当前访问的是飞书，使用默认存储、默认日志（Error级别），更多可选配置，请看：README.zh.md -> 如何构建整体配置（Config）。
+const conf = lark.newConfig(lark.Domain.FeiShu, appSettings, {
+    loggerLevel: lark.LoggerLevel.ERROR,
+    store: 需要使用分布式缓存实现, // 例如: packages/sample/src/config/config.ts 的 RedisStore
+})
 
 // 发送消息的内容
 const body = {
-    "open_id": "user open id",
-    "msg_type": "text",
-    "content": {
-        "text": "test send message",
+    open_id: "user open id",
+    msg_type: "text",
+    content: {
+        text: "test send message",
     },
 }
 // 构建请求 && 设置企业标识 Tenant key
-const req = lark.api.newRequest("message/v4/send", "POST", lark.api.AccessTokenType.Tenant, body, lark.api.setTenantKey("Tenant key"))
+const req = lark.api.newRequest("/open-apis/message/v4/send", "POST", lark.api.AccessTokenType.Tenant, body, lark.api.setTenantKey("Tenant key"))
 // 发送请求
 lark.api.sendRequest(conf, req).then(r => {
     // 打印请求的RequestID
