@@ -67,7 +67,7 @@ const appSettings = lark.newInternalAppSettings({
     helpDeskToken: "HelpDesk Token", // 非必需，使用服务台API时必需
 })
 
-// 当前访问的是飞书，使用默认存储、默认日志（Error级别），更多可选配置，请看：README.zh.md -> 如何构建整体配置（Config）。
+// 当前访问的是飞书，使用默认本地内存存储、默认控制台日志输出（Error级别），更多可选配置，请看：README.zh.md -> 如何构建整体配置（Config）。
 const conf = lark.newConfig(lark.Domain.FeiShu, appSettings, {
     loggerLevel: lark.LoggerLevel.ERROR,
 })
@@ -115,7 +115,7 @@ const appSettings = lark.newInternalAppSettings({
     verificationToken: "Verification Token",
 })
 
-// 当前访问的是飞书，使用默认存储、默认日志（Error级别），更多可选配置，请看：README.zh.md -> 如何构建整体配置（Config）。
+// 当前访问的是飞书，使用默认本地内存存储、默认控制台日志输出（Error级别），更多可选配置，请看：README.zh.md -> 如何构建整体配置（Config）。
 const conf = lark.newConfig(lark.Domain.FeiShu, appSettings, {
     loggerLevel: lark.LoggerLevel.ERROR,
 })
@@ -154,7 +154,7 @@ const appSettings = lark.newInternalAppSettings({
     verificationToken: "Verification Token",
 })
 
-// 当前访问的是飞书，使用默认存储、默认日志（Error级别），更多可选配置，请看：README.zh.md -> 如何构建整体配置（Config）。
+// 当前访问的是飞书，使用默认本地内存存储、默认控制台日志输出（Error级别），更多可选配置，请看：README.zh.md -> 如何构建整体配置（Config）。
 const conf = lark.newConfig(lark.Domain.FeiShu, appSettings, {
     loggerLevel: lark.LoggerLevel.ERROR,
 })
