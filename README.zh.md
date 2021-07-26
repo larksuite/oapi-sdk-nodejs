@@ -260,9 +260,9 @@ const lark = require("@larksuiteoapi/allcore");
 
 // 创建请求
 // httpPath：API路径
-    // 例如：https://domain/open-apis/contact/v3/users/:user_id，
+    // 例如：https://domain/open-apis/contact/v3/users/:user_id
     // 支持域名之后的路径，则 httpPath："/open-apis/contact/v3/users/:user_id"（推荐）
-    // 也支持全路径，则 httpPath："/open-apis/contact/v3/users/:user_id"
+    // 也支持全路径，则 httpPath："https://domain/open-apis/contact/v3/users/:user_id"
     // 也支持 /open-apis/ 之后的路径，则 httpPath："contact/v3/users/:user_id"
 // accessTokenType：API使用哪种token访问，取值范围：lark.api.AccessTokenType.App/Tenant/User，例如：lark.api.AccessTokenType.Tenant
 // input：请求体（可能是lark.api.FormData()（例如：文件上传））,如果不需要请求体（例如一些GET请求），则传：undefined
@@ -316,8 +316,7 @@ req.setIsNotDataField() // 设置响应体没有`data`字段
 
 ## 如何发送请求
 
--
-由于SDK已经封装了app_access_token、tenant_access_token的获取，所以在调业务API的时候，不需要去获取app_access_token、tenant_access_token。如果业务接口需要使用user_access_token，需要进行设置（lark.api.setUserAccessToken("
+- 由于SDK已经封装了app_access_token、tenant_access_token的获取，所以在调业务API的时候，不需要去获取app_access_token、tenant_access_token。如果业务接口需要使用user_access_token，需要进行设置（lark.api.setUserAccessToken("
 UserAccessToken")），具体请看 README.zh.md -> 如何构建请求（Request）
 - 更多使用示例，请看：[packages/sample/src/api](packages/sample/src/api)（含：文件的上传与下载）
 
@@ -334,7 +333,7 @@ async lark.api.sendRequest(conf:lark.core.Config, req:lark.api.Request)
 
 ```
 
-## lark.core.Context的常用方法
+## lark.core.Context 常用方法
 
 ```javascript
 const lark = require("@larksuiteoapi/allcore");
