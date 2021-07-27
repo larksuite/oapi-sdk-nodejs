@@ -261,9 +261,9 @@ const lark = require("@larksuiteoapi/allcore");
 // 创建请求
 // httpPath：API路径
     // 例如：https://domain/open-apis/contact/v3/users/:user_id
-    // 支持域名之后的路径，则 httpPath："/open-apis/contact/v3/users/:user_id"（推荐）
-    // 也支持全路径，则 httpPath："https://domain/open-apis/contact/v3/users/:user_id"
-    // 也支持 /open-apis/ 之后的路径，则 httpPath："contact/v3/users/:user_id"
+    // 支持：域名之后的路径，则 httpPath："/open-apis/contact/v3/users/:user_id"（推荐）
+    // 支持：全路径，则 httpPath："https://domain/open-apis/contact/v3/users/:user_id"
+    // 支持：/open-apis/ 之后的路径，则 httpPath："contact/v3/users/:user_id"
 // accessTokenType：API使用哪种token访问，取值范围：lark.api.AccessTokenType.App/Tenant/User，例如：lark.api.AccessTokenType.Tenant
 // input：请求体（可能是lark.api.FormData()（例如：文件上传））,如果不需要请求体（例如一些GET请求），则传：undefined
 const req = lark.api.newRequest(httpPath:string, httpMethod:string, accessTokenType:AccessTokenType, input:any)

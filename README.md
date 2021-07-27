@@ -259,7 +259,11 @@ const conf = lark.newConfig(lark.Domain.FeiShu, appSettings, {
 const lark = require("@larksuiteoapi/allcore");
 
 // Create request 
-// httpPath: (path after `open-apis/`) API path, for example: https://{domain}/open-apis/authen/v1/user_info, the httpPath: "/open-apis/authen/v1/user_info" 
+// httpPath: API path
+    // such as: https://domain/open-apis/contact/v3/users/:user_id
+    // support: the path of the domain name after, httpPath: "/open apis/contact/v3/users/:user_id" (recommended)
+    // support: the full path, httpPath: "https://domain/open-apis/contact/v3/users/:user_id"
+    // support: httpPath: "contact/v3/users/:user_id"
 // httpMethod: GET/POST/PUT/BATCH/DELETE 
 // accessTokenType: What kind of token access the API uses, value range: lark.api.AccessTokenType.App/Tenant/User, for example: lark.api.AccessTokenType.Tenant 
 // input : The request body (may be formdata (for example: file upload)), if the request body is not needed (for example, some GET requests), pass: undefined
