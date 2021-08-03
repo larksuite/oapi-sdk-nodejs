@@ -15,9 +15,9 @@ req.setQueryParams(queryParams)
 req.setIsResponseStream()
 lark.api.sendRequest(conf, req).then(resp => {
     fs.writeFileSync("./test.0.png", resp.data)
-    console.debug(resp.getRequestID())
-    console.debug(resp.getHTTPStatusCode())
-    console.debug(resp.getHeader())
+    console.log(resp.getRequestID())
+    console.log(resp.getHTTPStatusCode())
+    console.log(resp.getHeader())
 }).catch(e => {
     console.error(e)
 })
@@ -27,9 +27,9 @@ let req2 = lark.api.newRequest("image/v4/get", "GET",  lark.api.AccessTokenType.
 req2.setQueryParams(queryParams)
 req2.setResponseStream(fs.createWriteStream("./test.1.png"))
 lark.api.sendRequest(conf, req2).then(resp => {
-    console.debug(resp.getRequestID())
-    console.debug(resp.getHTTPStatusCode())
-    console.debug(resp.getHeader())
+    console.log(resp.getRequestID())
+    console.log(resp.getHTTPStatusCode())
+    console.log(resp.getHeader())
 }).catch(e => {
     console.error(e)
 })

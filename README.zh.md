@@ -18,7 +18,7 @@
 ## 安装方法
 
 ```shell script
-  npm i @larksuiteoapi/allcore@1.0.11
+  npm i @larksuiteoapi/allcore@1.0.12
 ```
 
 ## 术语解释

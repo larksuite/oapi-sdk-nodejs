@@ -38,7 +38,6 @@ export class DefaultStore implements Store {
     put = (key: string, value: string, expire: number) => {
         let v = new V(value, expire)
         this.data.set(key, v)
-        console.debug("store put", key, v)
     }
 }
 

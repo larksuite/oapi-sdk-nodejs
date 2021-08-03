@@ -22,7 +22,7 @@ If you encounter any problems during usage, please let us know by submitting  [G
 ## installation
 
 ```shell script
-  npm i @larksuiteoapi/allcore@1.0.11
+  npm i @larksuiteoapi/allcore@1.0.12
 ```
 
 ## Explanation of terms
