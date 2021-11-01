@@ -7,7 +7,7 @@ const conf = lark.newConfig(lark.Domain.FeiShu, appSettings, {
 })
 
 let queryParams = {
-    image_key: "img_5ac0852d-b3f2-4dc8-9dde-c5135cabe13g"
+    image_key: "img_v2_332fc963-94f6-4147-ba3a-c8f5f745d6fg"
 }
 
 let req = lark.api.newRequest("image/v4/get", "GET",  lark.api.AccessTokenType.Tenant, undefined)

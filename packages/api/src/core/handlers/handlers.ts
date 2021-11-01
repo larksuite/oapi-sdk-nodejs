@@ -159,18 +159,20 @@ const validateResponseFunc = async <T>(_: Context, req: request.Request<T>) => {
     let resp = req.httpResponse
     let contentType = resp.headers.get(ContentType.toLowerCase())
     if (req.isResponseStream) {
+        if (resp.ok) {
+            req.isResponseStreamReal = true;
+            return
+        }
         if (contentType && contentType.indexOf(ContentTypeJson) > -1) {
             req.isResponseStreamReal = false;
             return
         }
-        if (!resp.ok) {
-            throw newErrorOfInvalidResp(util.format("response is stream, but status code:%d", resp.status))
-        }
-        req.isResponseStreamReal = true;
-        return
+        let content = await resp.buffer()
+        throw newErrorOfInvalidResp(util.format("response is stream, but status code %d is not 200, content-type: %s, body: %s", resp.status, contentType, content))
     }
     if (!contentType || contentType.indexOf(ContentTypeJson) === -1) {
-        throw newErrorOfInvalidResp(util.format("content-type: %s, is not: %s, if is stream, please `request.setIsResponseStream()`, body:%s", contentType, ContentTypeJson, resp.body.toString()))
+        let content = await resp.buffer()
+        throw newErrorOfInvalidResp(util.format("status code: %d, content-type %s is not %s, body: %s", resp.status, contentType, ContentTypeJson, content))
     }
 }
 
