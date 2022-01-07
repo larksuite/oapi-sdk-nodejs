@@ -52,6 +52,7 @@
 #### 使用`企业自建应用`访问 修改用户部分信息API 示例
 
 ```javascript
+// import * as lark from "@larksuiteoapi/allcore";  // typescript
 const lark = require("@larksuiteoapi/allcore");
 
 // 企业自建应用的配置
@@ -103,6 +104,7 @@ lark.api.sendRequest(conf, req).then(r => {
 #### 使用`企业自建应用` 订阅 [首次启用应用事件](https://open.feishu.cn/document/ukTMukTMukTM/uQTNxYjL0UTM24CN1EjN) 示例
 
 ```javascript
+// import * as lark from "@larksuiteoapi/allcore";  // typescript
 const lark = require("@larksuiteoapi/allcore");
 
 // 企业自建应用的配置
@@ -142,6 +144,7 @@ lark.event.startServer(conf, 8089)
 #### 使用`企业自建应用`处理消息卡片回调示例
 
 ```javascript
+// import * as lark from "@larksuiteoapi/allcore";  // typescript
 const lark = require("@larksuiteoapi/allcore");
 
 // 企业自建应用的配置
@@ -176,6 +179,7 @@ lark.event.startServer(conf, 8089)
 ## 如何构建应用配置（AppSettings）
 
 ```javascript
+// import * as lark from "@larksuiteoapi/allcore";  // typescript
 const lark = require("@larksuiteoapi/allcore");
 
 // 防止应用信息泄漏，配置环境变量中，变量（4个）说明：
@@ -228,7 +232,7 @@ const appSettings = lark.newISVAppSettings({
         - 应用商品应用，接受开放平台下发的app_ticket，会保存到存储中，所以存储接口（Store）的实现的实现需要支持分布式存储。
 
 ```javascript
-
+// import * as lark from "@larksuiteoapi/allcore";  // typescript
 const lark = require("@larksuiteoapi/allcore");
 
 // 推荐使用Redis实现存储接口（Store），减少访问获取AccessToken接口的次数
@@ -255,7 +259,7 @@ const conf = lark.newConfig(lark.Domain.FeiShu, appSettings, {
 - 更多使用示例，请看：[packages/sample/src/api](packages/sample/src/api)（含：文件的上传与下载）
 
 ```javascript
-
+// import * as lark from "@larksuiteoapi/allcore";  // typescript
 const lark = require("@larksuiteoapi/allcore");
 
 // 创建请求
@@ -308,7 +312,7 @@ setNeedHelpDeskAuth() // 如果是服务台 API，需要设置 HelpDesk token
 // 使用示例:
 req.setNeedHelpDeskAuth() // 设置请求是否需要 HelpDesk token
 
-setIsNotDataField() // 设置响应体的是否 没有`data`字段，业务接口都是有`data`字段，所以不需要设置
+setIsNotDataField() // 设置响应体的是否 没有`data`字段
 // 使用示例:
 req.setIsNotDataField() // 设置响应体没有`data`字段
 
@@ -321,6 +325,7 @@ UserAccessToken")），具体请看 README.zh.md -> 如何构建请求（Request
 - 更多使用示例，请看：[packages/sample/src/api](packages/sample/src/api)（含：文件的上传与下载）
 
 ```javascript
+// import * as lark from "@larksuiteoapi/allcore";  // typescript
 const lark = require("@larksuiteoapi/allcore");
 
 // 参数说明：
@@ -336,6 +341,7 @@ async lark.api.sendRequest(conf:lark.core.Config, req:lark.api.Request)
 ## lark.core.Context 常用方法
 
 ```javascript
+// import * as lark from "@larksuiteoapi/allcore";  // typescript
 const lark = require("@larksuiteoapi/allcore");
 
 // 在事件订阅与消息卡片回调的处理者中，可以从lark.core.Context中获取 Config
@@ -349,6 +355,7 @@ const conf = lark.core.getConfigByCtx(ctx:lark.core.Context)
 - 更多使用示例，请看：[packages/sample/src/tools/downFile.js](packages/sample/src/tools/downFile.js)
 
 ```javascript
+// import * as lark from "@larksuiteoapi/allcore";  // typescript
 const lark = require("@larksuiteoapi/allcore");
 
 // 参数说明：

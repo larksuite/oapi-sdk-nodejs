@@ -46,7 +46,8 @@ If you encounter any problems during usage, please let us know by submitting  [G
 - For more use examples, please see: [packages/sample/src/api](packages/sample/src/api)
 
 ```javascript
-const lark = require("@larksuiteoapi/allcore");
+// import * as lark from "@larksuiteoapi/allcore";  // typescript
+const lark = require("@larksuiteoapi/allcore");     // javascript
 
 // Configuration of custom app, parameter description:
 // appID、appSecret: "Developer Console" -> "Credentials"（App ID、App Secret）
@@ -98,7 +99,8 @@ lark.api.sendRequest(conf, req).then(r => {
 #### Example of using `Custom App` to subscribe [App First Enabled](https://open.larksuite.com/document/uMzMyEjLzMjMx4yMzITM/uYjMyYjL2IjM24iNyIjN) event.
 
 ```javascript
-const lark = require("@larksuiteoapi/allcore");
+// import * as lark from "@larksuiteoapi/allcore";  // typescript
+const lark = require("@larksuiteoapi/allcore");     // javascript
 
 // Configuration of custom app, parameter description:
 // appID、appSecret: "Developer Console" -> "Credentials"（App ID、App Secret）
@@ -139,6 +141,9 @@ lark.event.startServer(conf, 8089)
 #### Example of using `Custom App` to handling message card callback.
 
 ```javascript
+// import * as lark from "@larksuiteoapi/allcore";  // typescript
+const lark = require("@larksuiteoapi/allcore");     // javascript
+
 // Configuration of custom app, parameter description:
 // appID、appSecret: "Developer Console" -> "Credentials"（App ID、App Secret）
 // verificationToken、encryptKey："Developer Console" -> "Event Subscriptions"（Verification Token、Encrypt Key）
@@ -172,7 +177,8 @@ lark.event.startServer(conf, 8089)
 ## How to build app settings(AppSettings)
 
 ```javascript
-const lark = require("@larksuiteoapi/allcore");
+// import * as lark from "@larksuiteoapi/allcore";  // typescript
+const lark = require("@larksuiteoapi/allcore");     // javascript
 
 // To prevent application information leakage, in the configuration environment variables, the variables (4) are described as follows:
 // APP_ID: "Developer Console" -> "Credentials"（App ID）
@@ -229,7 +235,7 @@ const appSettings = lark.newISVAppSettings({
           implementation of the storage interface (store) needs to support distributed storage.
 
 ```javascript
-
+// import * as lark from "@larksuiteoapi/allcore";  // typescript
 const lark = require("@larksuiteoapi/allcore");
 
 // It is recommended to use Redis to implement the storage interface (Store) to reduce the number of accesses to the AccessToken interface
@@ -255,7 +261,7 @@ const conf = lark.newConfig(lark.Domain.FeiShu, appSettings, {
 - For more examples, see[packages/sample/src/api](packages/sample/src/api)（including: file upload and download）
 
 ```javascript
-
+// import * as lark from "@larksuiteoapi/allcore";  // typescript
 const lark = require("@larksuiteoapi/allcore");
 
 // Create request 
@@ -311,7 +317,7 @@ setNeedHelpDeskAuth() // If it is a HelpDesk API, you need to set the HelpDesk t
 req.setNeedHelpDeskAuth() // Sets whether the request requires a HelpDesk token
 
 
-setIsNotDataField() // Set whether the response body does not have a 'data' field, and the business interface has a 'data' field, so it does not need to be set
+setIsNotDataField() // Set whether the response body does not have a 'data' field
 // Use example:
 req.setIsNotDataField() // There is no 'data' field in the set response body
 
@@ -322,6 +328,7 @@ req.setIsNotDataField() // There is no 'data' field in the set response body
 - For more use examples, please see: [packages/sample/src/api](packages/sample/src/api)（including: file upload and download）
 
 ```javascript
+// import * as lark from "@larksuiteoapi/allcore";  // typescript
 const lark = require("@larksuiteoapi/allcore");
 
 // Parameter Description:
@@ -336,6 +343,7 @@ async lark.api.sendRequest(conf: lark.core.Config, req: lark.api.Request)
 ## lark.core.Context common methods
 
 ```javascript
+// import * as lark from "@larksuiteoapi/allcore";  // typescript
 const lark = require("@larksuiteoapi/allcore");
 
 // In the handler of event subscription and message card callback, you can lark.core.Context Get config from
@@ -349,6 +357,7 @@ const conf = lark.core.getConfigByCtx(ctx: lark.core.Context)
 - For more use examples, please see: [packages/sample/src/tools/downFile.js](packages/sample/src/tools/downFile.js)
 
 ```javascript
+// import * as lark from "@larksuiteoapi/allcore";  // typescript
 const lark = require("@larksuiteoapi/allcore");
 
 // Get the file content
