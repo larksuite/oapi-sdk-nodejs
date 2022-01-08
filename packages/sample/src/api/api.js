@@ -4,6 +4,7 @@ const appSettings = lark.getInternalAppSettingsByEnv()
 
 const conf = lark.newConfig(lark.Domain.FeiShu, appSettings, {})
 
+// send text message
 let req = lark.api.newRequest("/open-apis/message/v4/send", "POST", lark.api.AccessTokenType.Tenant, {
     user_id: "77bbc392",
     msg_type: "text",
@@ -11,7 +12,9 @@ let req = lark.api.newRequest("/open-apis/message/v4/send", "POST", lark.api.Acc
         text: "test"
     }
 })
+
 req.setTimeoutOfMs(6000)
+
 lark.api.sendRequest(conf, req).then(resp => {
     console.log(resp.getHeader())
     console.log(resp.getRequestID())
@@ -20,6 +23,7 @@ lark.api.sendRequest(conf, req).then(resp => {
 }).catch(e => {
     console.log(e)
 })
+
 
 // send card message
 lark.api.sendRequest(conf, lark.api.newRequest("/open-apis/message/v4/send", "POST", lark.api.AccessTokenType.Tenant, {

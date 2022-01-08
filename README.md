@@ -22,7 +22,7 @@ If you encounter any problems during usage, please let us know by submitting  [G
 ## installation
 
 ```shell script
-  npm i @larksuiteoapi/allcore@1.0.13
+  npm i @larksuiteoapi/allcore@1.0.14
 ```
 
 ## Explanation of terms
@@ -316,10 +316,6 @@ setNeedHelpDeskAuth() // If it is a HelpDesk API, you need to set the HelpDesk t
 // Use example:
 req.setNeedHelpDeskAuth() // Sets whether the request requires a HelpDesk token
 
-
-setIsNotDataField() // Set whether the response body does not have a 'data' field
-// Use example:
-req.setIsNotDataField() // There is no 'data' field in the set response body
 
 ```
 

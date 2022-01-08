@@ -193,11 +193,11 @@ export const unmarshalResponseFunc = async <T>(ctx: Context, req: request.Reques
     getConfigByCtx(ctx).getLogger().debug(util.format("[unmarshalResponse] request:%s, response:body:",
         req), JSON.stringify(json))
     req.retryable = retryable(json.code)
-    req.response.setBody(json)
+    Object.entries(json).forEach(([k, v]) => {
+        req.response[k] = v;
+    })
     if (req.isNotDataField) {
         req.response.data = json
-    } else {
-        req.response.data = json["data"]
     }
 }
 

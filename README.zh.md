@@ -18,7 +18,7 @@
 ## 安装方法
 
 ```shell script
-  npm i @larksuiteoapi/allcore@1.0.13
+  npm i @larksuiteoapi/allcore@1.0.14
 ```
 
 ## 术语解释
@@ -311,10 +311,6 @@ req.setResponseStream(fs.createWriteStream("./test.1.png")) // 把响应流写�
 setNeedHelpDeskAuth() // 如果是服务台 API，需要设置 HelpDesk token
 // 使用示例:
 req.setNeedHelpDeskAuth() // 设置请求是否需要 HelpDesk token
-
-setIsNotDataField() // 设置响应体的是否 没有`data`字段
-// 使用示例:
-req.setIsNotDataField() // 设置响应体没有`data`字段
 
 ```
 

@@ -9,6 +9,9 @@ export class Response<T> {
     error: Err
     data: T
 
+    [propName: string]: any
+
+
     constructor(context: Context) {
         this.context = context;
         this.code = 0
@@ -25,12 +28,6 @@ export class Response<T> {
 
     getHTTPStatusCode(): number {
         return this.context.getHTTPStatusCode()
-    }
-
-    setBody(json: any) {
-        this.code = json.code
-        this.msg = json.msg
-        this.error = json.error
     }
 
     toString(): string {
