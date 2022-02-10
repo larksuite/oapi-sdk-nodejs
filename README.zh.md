@@ -39,10 +39,8 @@
 
 ### 调用服务端API
 
-- **必看** [如何调用服务端API](https://open.feishu.cn/document/ukTMukTMukTM/uYTM5UjL2ETO14iNxkTN/guide-to-use-server-api)
-  ，了解调用服务端API的过程及注意事项。
-    -
-    由于SDK已经封装了app_access_token、tenant_access_token的获取，所以在调业务API的时候，不需要去获取app_access_token、tenant_access_token。如果业务接口需要使用user_access_token，需要进行设置（lark.api.setUserAccessToken("
+- [如何调用服务端API](https://open.feishu.cn/document/ukTMukTMukTM/uYTM5UjL2ETO14iNxkTN/guide-to-use-server-api)，了解调用服务端API的过程及注意事项。
+    - 由于SDK已经封装了app_access_token、tenant_access_token的获取，所以在调业务API的时候，不需要去获取app_access_token、tenant_access_token。如果业务接口需要使用user_access_token，需要进行设置（lark.api.setUserAccessToken("
     UserAccessToken")），具体请看 README.zh.md -> 如何构建请求（Request）
 
 - 更多使用示例，请看[packages/sample/src/api](packages/sample/src/api)
