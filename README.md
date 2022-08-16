@@ -4,6 +4,7 @@
 
 # LarkSuite open api SDK
 
+Welcome to the new version of node-sdk: https://github.com/larksuite/node-sdk
 ## Overview
 
 ---

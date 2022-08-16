@@ -2,6 +2,8 @@
 
 # 飞书开放接口SDK
 
+欢迎使用官方新版node-sdk：https://github.com/larksuite/node-sdk
+
 ## 概述
 
 ---
