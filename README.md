@@ -2,9 +2,9 @@
 
 - 如果使用的是飞书，请看 [**飞书，点这里**](README.zh.md) ，飞书与Larksuite使用的域名不一样，引用的文档地址也是不同的。(If you are using FeiShu, please see [**飞书，点这里**](README.zh.md) , Feishu and larksuite use different domain names and reference different document addresses.)
 
-# LarkSuite open api SDK
+# [Deprecated]LarkSuite open api SDK
 
-Welcome to the new version of node-sdk: https://github.com/larksuite/node-sdk
+**Please use the new version of node-sdk: https://github.com/larksuite/node-sdk**
 ## Overview
 
 ---
