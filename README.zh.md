@@ -1,8 +1,8 @@
 [**README of Larksuite(Overseas)**](README.md) | 飞书
 
-# 飞书开放接口SDK
+# [Deprecated]飞书开放接口SDK
 
-欢迎使用官方新版node-sdk：https://github.com/larksuite/node-sdk
+**请使用官方新版node-sdk：https://github.com/larksuite/node-sdk**
 
 ## 概述
 
